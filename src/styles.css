@@ -1,3 +1,27 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'tailwindcss';
+@import 'primeicons/primeicons.css';
+
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --color-bg: #f5f6fa;
+  --color-primary: #2c3e50;
+  --color-secondary: #e67e22;
+  --color-accent: #16a085;
+  --color-text: #222831;
+  --color-text-secondary: #7f8c8d;
+  --color-border: #d1d8e0;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+.button-primary {
+  background-color: var(--color-primary);
+  color: #fff;
+}
