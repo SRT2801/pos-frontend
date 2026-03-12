@@ -1,0 +1,39 @@
+<p-drawer [visible]="visible()" (onHide)="sidebarState.close()" [closable]="false" position="left"
+  class="sidebar-drawer">
+  <ng-template #header>
+    <div class="flex items-center gap-2 p-4">
+      <p-avatar icon="pi pi-user" shape="circle" />
+      <span class="font-bold text-lg">Mi Proyecto POS</span>
+    </div>
+  </ng-template>
+  <nav class="flex flex-col gap-2 p-4">
+    <ng-container *ngFor="let option of options">
+      <ng-container *ngIf="!option.children">
+        <a [routerLink]="option.route" class="sidebar-link" (click)="sidebarState.close()">
+          <i class="pi" [ngClass]="option.icon + ' mr-2'"></i> {{ option.label }}
+        </a>
+      </ng-container>
+      <ng-container *ngIf="option.children">
+        <span class="sidebar-link cursor-pointer" (click)="toggleSubmenu(option)">
+          <i class="pi" [ngClass]="option.icon + ' mr-2'"></i>
+          {{ option.label }}
+          <i class="pi" [ngClass]="isSubmenuOpen(option) ? 'pi-chevron-down' : 'pi-chevron-right'" style="margin-left:auto"></i>
+        </span>
+        <div *ngIf="isSubmenuOpen(option)" class="ml-6 flex flex-col gap-1 animate-fade">
+          <a *ngFor="let child of option.children"
+             [routerLink]="child.route"
+             class="sidebar-link"
+             (click)="sidebarState.close()">
+            <i class="pi" [ngClass]="child.icon + ' mr-2'"></i> {{ child.label }}
+          </a>
+        </div>
+      </ng-container>
+    </ng-container>
+  </nav>
+  <ng-template #footer>
+    <div class="flex items-center gap-2 p-4">
+      <button pButton label="Cuenta" icon="pi pi-user" class="w-full" outlined></button>
+      <button pButton label="Salir" icon="pi pi-sign-out" class="w-full" severity="danger" text></button>
+    </div>
+  </ng-template>
+</p-drawer>
