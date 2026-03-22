@@ -12,18 +12,18 @@ export const routes: Routes = [
   },
 
   {
-    path: 'login',
-    component: LoginComponent,
-  },
-
-  {
-    path: 'register',
-    component: RegisterComponent,
-  },
-
-  {
     path: '',
     component: Layout,
-    children: [{ path: 'home', component: Home }],
+    children: [
+      { path: 'home', component: Home },
+      {
+        path: 'login',
+        component: LoginComponent,
+      },
+      {
+        path: 'register',
+        component: RegisterComponent,
+      },
+    ],
   },
 ];
