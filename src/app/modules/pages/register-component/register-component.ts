@@ -1,41 +1,100 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { registerSchema } from '../../shared/schemas/register.schema';
 import { AuthService } from '../../services/auth.service';
-import { FormsModule } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
+import { ToastService } from '../../services/toast.service';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+
+
+
 @Component({
-  selector: 'app-register-component',
-  imports: [FormsModule, ButtonModule, CommonModule],
+  imports: [CommonModule, FormsModule],
+  selector: 'app-register',
   templateUrl: './register-component.html',
-  styleUrl: './register-component.css',
 })
 export class RegisterComponent {
-  email = '';
-  password = '';
-  error = '';
-  success = '';
 
-  constructor(private authService: AuthService) {}
+  email = signal('');
+  password = signal('');
+  confirmPassword = signal('');
+
+  error = signal('');
+  success = signal('');
+  emailError = signal('');
+  passwordError = signal('');
+
+  showPassword = signal(false);
+  showConfirmPassword = signal(false);
+
+  constructor(
+    private authService: AuthService,
+    private toast: ToastService,
+  ) {}
+
+  get passwordsMatch() {
+    return this.password() === this.confirmPassword() && this.confirmPassword() !== '';
+  }
+
+  get confirmPasswordTouched() {
+    return this.confirmPassword() !== '';
+  }
+
+  togglePassword() {
+    this.showPassword.set(!this.showPassword());
+  }
+
+  toggleConfirmPassword() {
+    this.showConfirmPassword.set(!this.showConfirmPassword());
+  }
 
   register() {
-    const result = registerSchema.safeParse({ email: this.email, password: this.password });
-    if (!result.success) {
-      this.error = result.error.issues.map((e) => e.message).join(', ');
-      this.success = '';
+    
+    this.error.set('');
+    this.success.set('');
+    this.emailError.set('');
+    this.passwordError.set('');
+
+    if (this.password() !== this.confirmPassword()) {
+      this.error.set('Las contraseñas no coinciden');
       return;
     }
-    this.error = '';
-    this.success = '';
-    this.authService.register({ email: this.email, password: this.password }).subscribe({
-      next: (data) => {
-        this.success = 'Registro exitoso';
-        this.error = '';
-        // Puedes redirigir o mostrar mensaje de éxito aquí
+
+    const formData = {
+      email: this.email(),
+      password: this.password(),
+    };
+
+    const result = registerSchema.safeParse(formData);
+
+    if (!result.success) {
+     
+      this.emailError.set('');
+      this.passwordError.set('');
+  
+      result.error.issues.forEach((issue) => {
+        if (issue.path.includes('email')) {
+          this.emailError.set(issue.message);
+        }
+        if (issue.path.includes('password')) {
+          this.passwordError.set(issue.message);
+        }
+      });
+      return;
+    }
+
+    this.error.set('');
+
+    this.authService.register(formData).subscribe({
+      next: () => {
+        this.toast.success('Registro exitoso');
+        this.email.set('');
+        this.password.set('');
+        this.confirmPassword.set('');
       },
       error: (err) => {
-        this.error = err.error?.message || 'Error en el registro';
-        this.success = '';
+        const message = err.error?.message || 'Error en el registro';
+        this.error.set(message);
+        this.toast.error(message);
       },
     });
   }
