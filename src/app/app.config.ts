@@ -15,6 +15,7 @@ import { storeIterceptor } from './modules/core/http/interceptors/store.intercep
 
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura';
+import { MessageService } from 'primeng/api';
 
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
@@ -36,5 +37,6 @@ export const appConfig: ApplicationConfig = {
         },
       },
     }),
+    MessageService,
   ],
 };
