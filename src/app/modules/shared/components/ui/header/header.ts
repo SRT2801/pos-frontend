@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { SidebarStateService } from '../../../services/sidebarState.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { usesMinimalLayout } from '../../../layout/minimal-layout.util';
 
 @Component({
   selector: 'app-header',
@@ -16,6 +17,6 @@ export class Header {
   ) {}
 
   hideSidebarButton(): boolean {
-    return this.router.url.includes('/login') || this.router.url.includes('/register');
+    return usesMinimalLayout(this.router.url);
   }
 }
