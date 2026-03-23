@@ -5,7 +5,7 @@ import { Header } from '../components/ui/header/header';
 import { Router, RouterModule } from '@angular/router';
 import { SidebarStateService } from '../services/sidebarState.service';
 import { ToastModule } from 'primeng/toast';
-
+import { usesMinimalLayout } from './minimal-layout.util';
 
 @Component({
   selector: 'app-layout',
@@ -19,7 +19,7 @@ export class Layout {
     public router: Router,
   ) {}
 
-  isAuthRoute(): boolean {
-    return this.router.url.includes('/login') || this.router.url.includes('/register');
+  isMinimalLayout(): boolean {
+    return usesMinimalLayout(this.router.url);
   }
 }

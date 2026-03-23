@@ -1,8 +1,16 @@
 <p-toast />
-<app-header></app-header>
-<div class="flex flex-1 min-h-screen ">
-  <app-sidebar></app-sidebar>
-  <main class="flex-1 p-6">
-    <router-outlet></router-outlet>
-  </main>
+<div class="flex min-h-screen flex-col">
+  <app-header></app-header>
+  @if (!isMinimalLayout()) {
+    <div class="flex min-h-0 flex-1">
+      <app-sidebar></app-sidebar>
+      <main class="min-h-0 flex-1 overflow-auto p-6">
+        <router-outlet></router-outlet>
+      </main>
+    </div>
+  } @else {
+    <main class="flex min-h-0 flex-1 flex-col overflow-auto">
+      <router-outlet></router-outlet>
+    </main>
+  }
 </div>
