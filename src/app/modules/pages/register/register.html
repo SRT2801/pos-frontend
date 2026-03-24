@@ -1,117 +1,80 @@
 <div class="flex min-h-0 flex-1 flex-col bg-slate-50">
-  <div
-    class="flex flex-1 flex-col justify-center px-4 py-8 sm:px-6 sm:py-10 md:px-8  lg:py-10">
+  <div class="flex flex-1 flex-col justify-center px-4 py-8 sm:px-6 sm:py-10 md:px-8  lg:py-10">
     <div
-      class="mx-auto w-full max-w-lg rounded-2xl border border-slate-200/80 bg-white p-8 shadow-lg shadow-slate-200/50 sm:max-w-2xl sm:rounded-3xl sm:p-9 md:p-10">
+      class="mx-auto w-full max-w-lg rounded-2xl border border-slate-200/80 bg-white p-5 shadow-lg shadow-slate-200/50 sm:max-w-2xl sm:rounded-3xl sm:p-6 md:p-8">
       <div class="mb-8 flex flex-col gap-3 text-center">
         <h1 class="text-3xl leading-tight font-black tracking-tight text-slate-900 sm:text-4xl">
-          Create Account
+          Crea tu cuenta
         </h1>
         <p class="text-base font-normal leading-normal text-slate-500">
-          Join our community and start your shopping journey today.
+          Comienza tu viaje en el comercio electrónico en segundos.
         </p>
       </div>
-      <form class="flex flex-col gap-5" (ngSubmit)="register()">
+      <form class="flex flex-col gap-3" (ngSubmit)="register()">
         <div class="flex flex-col gap-2">
-          <label class="text-sm font-semibold text-slate-900" for="reg-email">Email Address</label>
+          <label
+            class="block text-sm font-semibold text-on-surface-variant mb-2 group-focus-within:text-primary transition-colors"
+            for="email">Email</label>
           <div class="relative">
-            <i class="pi pi-envelope pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-slate-400"></i>
-            <input
-              class="form-input h-12 w-full rounded-lg border border-slate-200 bg-white py-2 pr-4 pl-12 text-base text-slate-900 placeholder:text-slate-400 focus:border-blue-700 focus:ring-2 focus:ring-blue-700/20 focus:outline-none sm:h-14"
-              id="reg-email"
-              placeholder="name@example.com"
-              type="email"
-              required
-              name="email"
-              [ngModel]="email()"
-              (ngModelChange)="email.set($event)" />
+            <app-input id="email" name="email" type="email" placeholder="tu@email.com" [required]="true" [model]="email"
+              inputClass="w-full pl-10 pr-4 py-2 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-700 outline-none hover:border-blue-400 text-base"
+              icon="pi-envelope">
+            </app-input>
           </div>
           @if (emailError()) {
-            <div class="text-xs text-red-500">{{ emailError() }}</div>
+          <div class="text-xs text-red-500">{{ emailError() }}</div>
           }
         </div>
-        <div class="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5">
+        <div class="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
           <div class="flex flex-col gap-2">
-            <label class="text-sm font-semibold text-slate-900" for="reg-password">Password</label>
+            <label class="text-sm font-semibold text-slate-900" for="reg-password">Contraseña</label>
             <div class="relative flex items-center">
-              <input
-                class="form-input h-12 w-full rounded-lg border border-slate-200 bg-white px-4 py-2 pr-11 text-base text-slate-900 placeholder:text-slate-400 focus:border-blue-700 focus:ring-2 focus:ring-blue-700/20 focus:outline-none sm:h-14 sm:pr-12"
-                id="reg-password"
-                placeholder="••••••••"
-                [type]="showPassword() ? 'text' : 'password'"
-                required
-                name="password"
-                [ngModel]="password()"
-                (ngModelChange)="password.set($event)" />
-              <button
-                class="absolute right-2 flex h-9 w-9 items-center justify-center rounded-md text-slate-400 transition-colors hover:bg-slate-50 hover:text-slate-600"
-                type="button"
-                (click)="togglePassword()"
-                aria-label="Toggle password visibility">
-                <i class="pi" [ngClass]="showPassword() ? 'pi-eye-slash' : 'pi-eye'"></i>
-              </button>
+              <app-password-input id="reg-password" name="password" placeholder="••••••••" [required]="true"
+                [model]="password"
+                inputClass="form-input h-12 w-full rounded-lg border border-slate-200 bg-white pl-10 py-2 pr-11 text-base text-slate-900 placeholder:text-slate-400 focus:border-blue-700 focus:ring-2 focus:ring-blue-700/20 focus:outline-none sm:h-14 sm:pr-12"
+                icon="pi-lock">
+              </app-password-input>
             </div>
             @if (passwordError()) {
-              <div class="mt-1 text-xs text-red-500">{{ passwordError() }}</div>
+            <div class="mt-1 text-xs text-red-500">{{ passwordError() }}</div>
             }
           </div>
           <div class="flex flex-col gap-2">
-            <label class="text-sm font-semibold text-slate-900" for="reg-confirm">Confirm Password</label>
+            <label class="text-sm font-semibold text-slate-900" for="reg-confirm">Confirmar Contraseña</label>
             <div class="relative flex items-center">
-              <input
-                id="reg-confirm"
-                class="form-input h-12 w-full rounded-lg border py-2 pr-24 pl-4 text-base text-slate-900 placeholder:text-slate-400 focus:ring-2 focus:outline-none sm:h-14"
-                [ngClass]="{
-                  'border-emerald-500/50 bg-emerald-50/30 focus:border-emerald-500 focus:ring-emerald-500/30':
-                    passwordsMatch && confirmPasswordTouched,
-                  'border-red-500/50 bg-red-50/30 focus:border-red-500 focus:ring-red-500/30':
-                    !passwordsMatch && confirmPasswordTouched,
-                  'border-slate-200 bg-white focus:border-blue-700 focus:ring-blue-700/20':
-                    !confirmPasswordTouched
-                }"
-                placeholder="••••••••"
-                [type]="showConfirmPassword() ? 'text' : 'password'"
-                name="confirmPassword"
-                [ngModel]="confirmPassword()"
-                (ngModelChange)="confirmPassword.set($event)" />
-              <button
-                class="absolute right-10 flex h-9 w-9 items-center justify-center rounded-md text-slate-400 transition-colors hover:bg-slate-50 hover:text-slate-600"
-                type="button"
-                (click)="toggleConfirmPassword()"
-                aria-label="Toggle confirm password visibility">
-                <i class="pi" [ngClass]="showConfirmPassword() ? 'pi-eye-slash' : 'pi-eye'"></i>
-              </button>
+              <app-password-input id="reg-confirm" name="confirmPassword" placeholder="••••••••" [required]="true"
+                [model]="confirmPassword"
+                [inputClass]="
+                  'form-input h-12 w-full rounded-lg border py-2 pr-24 pl-10 text-base text-slate-900 placeholder:text-slate-400 focus:ring-2 focus:outline-none sm:h-14 ' +
+                  (confirmPasswordTouched ? (passwordsMatch ? 'border-emerald-500/50 bg-emerald-50/30 focus:border-emerald-500 focus:ring-emerald-500/30' : 'border-red-500/50 bg-red-50/30 focus:border-red-500 focus:ring-red-500/30') : 'border-slate-200 bg-white focus:border-blue-700 focus:ring-blue-700/20')"
+                icon="pi-lock">
+              </app-password-input>
               @if (confirmPasswordTouched) {
-                <i
-                  class="pi absolute right-3 text-xl"
-                  [ngClass]="{
+              <i class="pi absolute right-1/7 text-xl" [ngClass]="{
                     'pi-check-circle text-emerald-500': passwordsMatch,
                     'pi-times-circle text-red-500': !passwordsMatch
                   }"></i>
               }
             </div>
             @if (error() && error() === 'Las contraseñas no coinciden') {
-              <div class="mt-1 text-xs text-red-500">{{ error() }}</div>
+            <div class="mt-1 text-xs text-red-500">{{ error() }}</div>
             }
           </div>
         </div>
-        <div class="flex items-start gap-3 py-1">
-          <input
-            class="mt-1 h-4 w-4 shrink-0 rounded border-slate-300 text-blue-700 focus:ring-blue-700"
-            id="terms"
-            type="checkbox"
-            required />
+        <div class="flex items-start gap-2 py-1">
+          <input class="mt-1 h-4 w-4 shrink-0 rounded border-slate-300 text-blue-700 focus:ring-blue-700" id="terms"
+            type="checkbox" required />
           <label class="text-sm leading-snug text-slate-600" for="terms">
-            I agree to the
-            <a class="font-semibold text-blue-700 hover:underline" href="#">Terms of Service</a>
-            and
-            <a class="font-semibold text-blue-700 hover:underline" href="#">Privacy Policy</a>.
+            Acepto los
+            <a class="font-semibold text-blue-700 hover:underline" href="#">Términos de Servicio</a>
+            y
+            <a class="font-semibold text-blue-700 hover:underline" href="#">Política de Privacidad</a>.
           </label>
         </div>
         <button
-          class="flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-blue-700 px-4 text-base font-bold text-white shadow-md transition-all hover:bg-blue-800 active:scale-[0.98] sm:h-14"
+          class="flex h-10 w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-blue-700 px-4 text-base font-bold text-white shadow-md transition-all hover:bg-blue-800 active:scale-[0.98] sm:h-11"
           type="submit">
-          <span>Create My Account</span>
+          <span>Crea tu cuenta</span>
           <i class="pi pi-arrow-right"></i>
         </button>
       </form>
@@ -120,26 +83,24 @@
           <span class="w-full border-t border-slate-200"></span>
         </div>
         <div class="relative flex justify-center text-xs font-medium tracking-wide text-slate-400 uppercase">
-          <span class="bg-white px-3">Or sign up with</span>
+          <span class="bg-white px-3">O continúa con</span>
         </div>
       </div>
       <div class="grid grid-cols-2 gap-3 sm:gap-4">
-        <button
-          type="button"
+        <button type="button"
           class="flex h-12 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 transition-colors hover:border-slate-300 hover:bg-slate-50">
           <i class="pi pi-google text-lg"></i>
           Google
         </button>
-        <button
-          type="button"
+        <button type="button"
           class="flex h-12 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 transition-colors hover:border-slate-300 hover:bg-slate-50">
           <i class="pi pi-facebook text-lg"></i>
           Facebook
         </button>
       </div>
       <p class="mt-8 text-center text-sm text-slate-600">
-        Already have an account?
-        <a class="font-bold text-blue-700 hover:underline" routerLink="/login">Sign in</a>
+        ¿Ya tienes una cuenta?
+        <a class="font-bold text-blue-700 hover:underline" routerLink="/login">Inicia sesión</a>
       </p>
     </div>
   </div>
