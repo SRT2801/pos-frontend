@@ -1,0 +1,8 @@
+<div class="relative">
+  <ng-content select="i[slot=icon]"></ng-content>
+  <input [id]="id" [type]="type" [placeholder]="placeholder" [name]="name" [class]="inputClass"
+    [attr.aria-label]="ariaLabel" [attr.required]="required ? '' : null" [ngModel]="model()"
+    (ngModelChange)="model.set($event)" [attr.autocomplete]="autocomplete" [attr.disabled]="disabled ? '' : null"
+    [attr.maxlength]="maxlength" [attr.minlength]="minlength" [attr.pattern]="pattern"
+    [attr.autofocus]="autofocus ? '' : null" [attr.readonly]="readonly ? '' : null" />
+</div>

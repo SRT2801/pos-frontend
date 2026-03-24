@@ -1,0 +1,19 @@
+.input-base {
+  width: 100%;
+  padding-left: 2.5rem;
+  padding-right: 1rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  background-color: var(--surface-container-low);
+  border: 1px solid var(--slate-200);
+  border-radius: 0.5rem;
+  transition: all 0.2s;
+  outline: none;
+}
+.input-base:focus {
+  ring: 2px solid var(--blue-500);
+  border-color: var(--primary);
+}
+.input-base:hover {
+  border-color: var(--outline-variant);
+}
