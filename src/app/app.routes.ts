@@ -3,6 +3,7 @@ import { LoginComponent } from './modules/pages/login/login';
 import { RegisterPage } from './modules/pages/register/register';
 import { Layout } from './modules/shared/layout/layout';
 import { Home } from './modules/pages/home/home';
+import { RegisterStore } from './modules/pages/register-store/register-store';
 
 export const routes: Routes = [
   {
@@ -23,6 +24,10 @@ export const routes: Routes = [
       {
         path: 'register',
         component: RegisterPage,
+      },
+      {
+        path: 'register-store',
+        component: RegisterStore,
       },
     ],
   },
