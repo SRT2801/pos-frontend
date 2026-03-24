@@ -12,6 +12,11 @@ export class AuthService {
     return this.http.post(url, user);
   }
 
+   registerStore(user: { email: string; password: string; storeName: string; storeSlug: string }): Observable<any> {
+    const url = `${environment.apiUrl}/auth/register-store`;
+    return this.http.post(url, user);
+  }
+
   login(user: { email: string; password: string }): Observable<any> {
     const url = `${environment.apiUrl}/auth/signin`;
     return this.http.post(url, user);
