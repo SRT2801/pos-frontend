@@ -1,60 +1,43 @@
 <div class="flex min-h-0 flex-1 flex-col bg-slate-50">
- 
-  <div
-    class="flex flex-1 flex-col justify-center px-4 py-8 sm:px-6 sm:py-10 md:px-8 md:py-10 lg:py-10">
+
+  <div class="flex flex-1 flex-col justify-center px-4 py-8 sm:px-6 sm:py-10 md:px-8 md:py-10 lg:py-10">
     <div
-      class="mx-auto w-full max-w-md rounded-2xl border border-slate-200/80 bg-white p-8 shadow-lg shadow-slate-200/50 sm:max-w-lg sm:rounded-3xl sm:p-9 md:p-10">
+      class="mx-auto w-full max-w-md rounded-2xl border border-slate-200/80 bg-white p-5 shadow-lg shadow-slate-200/50 sm:max-w-lg sm:rounded-3xl sm:p-6 md:p-8">
       <div class="mb-8 flex flex-col gap-3 text-center">
         <h1 class="text-3xl leading-tight font-black tracking-tight text-slate-900 sm:text-4xl">
-          Welcome Back
+          Bienvenido 
         </h1>
         <p class="text-base font-normal leading-normal text-slate-500">
-          Sign in to continue shopping
+          Inicia sesión para continuar comprando.
         </p>
       </div>
-      <form class="flex flex-col gap-5">
+      <form class="flex flex-col gap-3">
         <div class="flex flex-col gap-2">
           <label class="text-sm font-semibold text-slate-900" for="email">Email Address</label>
-          <input
-            class="form-input h-12 w-full rounded-lg border border-slate-200 bg-white px-4 text-base font-normal placeholder:text-slate-400 focus:border-blue-700 focus:ring-2 focus:ring-blue-700/20 focus:outline-none sm:h-14"
-            id="email"
-            name="email"
-            placeholder="email@example.com"
-            type="email" />
+          <app-input id="email" name="email" type="email" placeholder="email@example.com" [model]="email"
+            inputClass="form-input h-12 w-full rounded-lg border border-slate-200 bg-white pl-10 pr-4 text-base font-normal placeholder:text-slate-400 focus:border-blue-700 focus:ring-2 focus:ring-blue-700/20 focus:outline-none sm:h-14"
+            [required]="true" icon="pi-envelope">
+          </app-input>
         </div>
         <div class="flex flex-col gap-2">
           <div class="flex items-center justify-between gap-2">
-            <label class="text-sm font-semibold text-slate-900" for="password">Password</label>
-            <a class="shrink-0 text-sm font-medium text-blue-700 hover:underline" href="#"
-              >Forgot password?</a
-            >
+            <label class="text-sm font-semibold text-slate-900" for="password">Contraseña</label>
+            <a class="shrink-0 text-sm font-medium text-blue-700 hover:underline" href="#">¿Olvidaste tu contraseña?</a>
           </div>
-          <div class="relative flex items-center">
-            <input
-              class="form-input h-12 w-full rounded-lg border border-slate-200 bg-white py-2 pr-12 pl-4 text-base font-normal placeholder:text-slate-400 focus:border-blue-700 focus:ring-2 focus:ring-blue-700/20 focus:outline-none sm:h-14"
-              id="password"
-              name="password"
-              placeholder="Enter your password"
-              type="password" />
-            <button
-              class="absolute right-3 flex h-10 w-10 items-center justify-center rounded-md text-slate-400 transition-colors hover:bg-slate-50 hover:text-slate-600"
-              type="button"
-              aria-label="Toggle password visibility">
-              <i class="pi pi-eye text-lg"></i>
-            </button>
-          </div>
+          <app-password-input id="password" name="password" placeholder="Enter your password" [model]="password"
+            inputClass="form-input h-12 w-full rounded-lg border border-slate-200 bg-white py-2 pr-12 pl-10 text-base font-normal placeholder:text-slate-400 focus:border-blue-700 focus:ring-2 focus:ring-blue-700/20 focus:outline-none sm:h-14"
+            [required]="true" icon="pi-lock">
+          </app-password-input>
         </div>
         <div class="flex items-center gap-2 py-1">
-          <input
-            class="h-4 w-4 rounded border-slate-300 text-blue-700 focus:ring-blue-700"
-            id="remember"
+          <input class="h-4 w-4 rounded border-slate-300 text-blue-700 focus:ring-blue-700" id="remember"
             type="checkbox" />
-          <label class="text-sm text-slate-600" for="remember">Keep me signed in</label>
+          <label class="text-sm text-slate-600" for="remember">Mantenerme conectado</label>
         </div>
         <button
-          class="flex h-12 w-full cursor-pointer items-center justify-center rounded-lg bg-blue-700 px-4 text-base font-bold text-white shadow-md transition-all hover:bg-blue-800 active:scale-[0.98] sm:h-14"
+          class="flex h-11 w-full cursor-pointer items-center justify-center rounded-lg bg-blue-700 px-4 text-base font-bold text-white shadow-md transition-all hover:bg-blue-800 active:scale-[0.98] sm:h-12"
           type="submit">
-          Sign In
+          Iniciar sesión
         </button>
       </form>
       <div class="relative my-8">
@@ -62,32 +45,26 @@
           <span class="w-full border-t border-slate-200"></span>
         </div>
         <div class="relative flex justify-center text-xs font-medium tracking-wide text-slate-400 uppercase">
-          <span class="bg-white px-3">Or continue with</span>
+          <span class="bg-white px-3">O continúa con</span>
         </div>
       </div>
       <div class="grid grid-cols-2 gap-3 sm:gap-4">
-        <button
-          type="button"
+        <button type="button"
           class="flex h-12 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 transition-colors hover:border-slate-300 hover:bg-slate-50">
           <i class="pi pi-google text-lg"></i>
           Google
         </button>
-        <button
-          type="button"
+        <button type="button"
           class="flex h-12 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 transition-colors hover:border-slate-300 hover:bg-slate-50">
           <i class="pi pi-facebook text-lg"></i>
           Facebook
         </button>
       </div>
       <p class="mt-8 text-center text-sm text-slate-600">
-        Don't have an account?
-        <a
-          class="font-bold text-blue-700 hover:underline"
-          routerLink="/register"
-          >Sign up for free</a
-        >
+        ¿No tienes una cuenta?
+        <a class="font-bold text-blue-700 hover:underline" routerLink="/register">Regístrate gratis</a>
       </p>
     </div>
   </div>
-  
+
 </div>
