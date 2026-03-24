@@ -1,0 +1,110 @@
+<main class="grow flex items-center justify-center p-6 sm:p-12">
+  <!-- Main Form Container -->
+  <div
+    class="w-full max-w-xl bg-surface border border-slate-200/80 rounded-xl shadow-xl p-5 md:p-8 relative overflow-hidden">
+
+
+    <div class="relative z-10">
+      <div class="mb-10">
+        <h1 class="text-3xl font-extrabold text-on-surface tracking-tight mb-2">Crea tu Tienda</h1>
+        <p class="text-on-surface-variant">Comienza tu viaje en el comercio electrónico en segundos.</p>
+      </div>
+      <form class="space-y-3" (submit)="registerStore()">
+        <!-- Email Field -->
+        <div class="group">
+          <label
+            class="block text-sm font-semibold text-on-surface-variant mb-2 group-focus-within:text-primary transition-colors"
+            for="email">Email Address</label>
+          <div class="relative">
+            <app-input id="email" name="email" type="email" placeholder="tu@email.com" [required]="true" [model]="email"
+              inputClass="w-full pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-700 transition-all duration-200 outline-none hover:border-blue-400"
+              icon="pi-envelope">
+            </app-input>
+          </div>
+          @if (emailError()) {
+          <div class="text-xs text-red-500">{{ emailError() }}</div>
+          }
+        </div>
+        <!-- Password and Confirm Password Fields Side by Side -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Password Field -->
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-semibold text-slate-900" for="password">Password</label>
+            <div class="relative flex items-center">
+              <app-password-input id="password" name="password" placeholder="••••••••" [required]="true"
+                [model]="password"
+                inputClass="form-input h-12 w-full rounded-lg border py-2 pr-24 pl-4 text-base text-slate-900 placeholder:text-slate-400 focus:ring-2 focus:outline-none sm:h-14 border-slate-200 bg-white focus:border-blue-700 focus:ring-blue-700/20">
+              </app-password-input>
+            </div>
+            @if (passwordError()) {
+            <div class="mt-1 text-xs text-red-500">{{ passwordError() }}</div>
+            }
+          </div>
+          <!-- Confirm Password Field -->
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-semibold text-slate-900" for="reg-confirm">Confirm Password</label>
+            <div class="relative flex items-center">
+              <app-password-input id="reg-confirm" name="confirmPassword" placeholder="••••••••" [required]="true"
+                [model]="confirmPassword"
+                [inputClass]="
+                  'form-input h-12 w-full rounded-lg border py-2 pr-24 pl-4 text-base text-slate-900 placeholder:text-slate-400 focus:ring-2 focus:outline-none sm:h-14 ' +
+                  (confirmPasswordTouched ? (passwordsMatch ? 'border-emerald-500/50 bg-emerald-50/30 focus:border-emerald-500 focus:ring-emerald-500/30' : 'border-red-500/50 bg-red-50/30 focus:border-red-500 focus:ring-red-500/30') : 'border-slate-200 bg-white focus:border-blue-700 focus:ring-blue-700/20')">
+              </app-password-input>
+              @if (confirmPasswordTouched) {
+              <span class="absolute right-12 flex items-center h-full">
+                <i class="pi text-xl" [ngClass]="{
+                    'pi-check-circle text-emerald-500': passwordsMatch,
+                    'pi-times-circle text-red-500': !passwordsMatch
+                  }"></i>
+              </span>
+              }
+            </div>
+            @if (error() && error() === 'Las contraseñas no coinciden') {
+            <div class="mt-1 text-xs text-red-500">{{ error() }}</div>
+            }
+          </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Store Name Field -->
+          <div class="group">
+            <label
+              class="block text-sm font-semibold text-on-surface-variant mb-2 group-focus-within:text-primary transition-colors"
+              for="store-name">Store Name</label>
+            <div class="relative">
+              <app-input id="store-name" name="storeName" placeholder="Commercial Name" [required]="true"
+                [model]="storeName"
+                inputClass="w-full pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-700 transition-all duration-200 outline-none hover:border-blue-400"
+                icon=" pi-shop">
+              </app-input>
+            </div>
+          </div>
+          <!-- Store Slug Field -->
+          <div class="group">
+            <label
+              class="block text-sm font-semibold text-on-surface-variant mb-2 group-focus-within:text-primary transition-colors"
+              for="store-slug">Slug de la Tienda</label>
+            <div class="relative">
+              <app-input id="store-slug" name="storeSlug" placeholder="mi-tienda-slug" [required]="true"
+                [model]="storeSlug"
+                inputClass="w-full pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-700 transition-all duration-200 outline-none hover:border-blue-400"
+                icon=" pi pi-link">
+              </app-input>
+            </div>
+          </div>
+        </div>
+        <!-- CTA Button -->
+        <button
+          class="w-full bg-primary text-on-primary font-bold py-3 rounded-lg shadow-lg shadow-primary/20 hover:bg-primary/90 active:scale-[0.98] transition-all duration-150 flex items-center justify-center gap-2 mt-3 group"
+          type="submit">
+          <span>Registrar Tienda</span>
+          <i class="pi pi-arrow-right transition-transform group-hover:translate-x-1"></i>
+        </button>
+      </form>
+      <div class="mt-8 pt-8 border-t border-t-slate-300 text-center">
+        <p class="text-sm text-on-surface-variant">
+          ¿Ya tienes una cuenta? <a class="text-primary font-semibold hover:underline" routerLink="/login">Inicia Sesión</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</main>
