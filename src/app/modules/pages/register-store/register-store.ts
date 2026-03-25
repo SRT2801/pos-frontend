@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { InputComponent } from '../../shared/components/ui/input/input';
 import { PasswordInputComponent } from '../../shared/components/ui/input/password-input';
 import { RouterLink } from '@angular/router';
-import { ProgressSpinnerService } from '../../services/progress-spinner.service';
+import { ProgressSpinnerService  } from '../../services/progress-spinner.service';
 
 @Component({
   imports: [CommonModule, FormsModule, InputComponent, PasswordInputComponent, RouterLink],
