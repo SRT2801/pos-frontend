@@ -28,7 +28,7 @@ export class ToastService {
     this.show('warn', detail, summary, life);
   }
 
-  error(detail: string, summary = 'An error occurred', life = 5000): void {
+  error(detail: string, summary = 'Error', life = 5000): void {
     this.show('error', detail, summary, life);
   }
 
