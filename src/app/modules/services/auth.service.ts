@@ -12,13 +12,29 @@ export class AuthService {
     return this.http.post(url, user);
   }
 
-   registerStore(user: { email: string; password: string; storeName: string; storeSlug: string }): Observable<any> {
+  registerStore(user: {
+    email: string;
+    password: string;
+    storeName: string;
+    storeSlug: string;
+  }): Observable<any> {
     const url = `${environment.apiUrl}/auth/register-store`;
     return this.http.post(url, user);
   }
 
   login(user: { email: string; password: string }): Observable<any> {
     const url = `${environment.apiUrl}/auth/signin`;
-    return this.http.post(url, user);
+    return this.http.post(url, user, { withCredentials: true });
+  }
+
+  logout(): Observable<any> {
+    const url = `${environment.apiUrl}/auth/signout`;
+    return this.http.post(url, {}, { withCredentials: true });
+  }
+
+  
+  refreshToken(): Observable<any> {
+    const url = `${environment.apiUrl}/auth/refresh`;
+    return this.http.post(url, {}, { withCredentials: true });
   }
 }
