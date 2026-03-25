@@ -1,15 +1,26 @@
-import { HttpErrorResponse, HttpInterceptorFn } from "@angular/common/http";
-import { catchError, throwError } from "rxjs";
-
+import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
+import { catchError, throwError, switchMap } from 'rxjs';
+import { inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { environment } from '../../../../../environments/environment';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
+  const http = inject(HttpClient);
+  const router = inject(Router);
+
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-
       if (error.status === 401) {
-        // Token expirado o inválido → redirigir a login
-        // Ejemplo: inject(Router).navigate(['/login']);
-        console.error('No autorizado. Redirigir a login.');
+        return http.post(`${environment.apiUrl}/auth/refresh`, {}, { withCredentials: true }).pipe(
+          switchMap(() => next(req)),
+          catchError((refreshError) => {
+            const mensaje = error.error?.message || 'No autorizado';
+            console.error({ mensaje });
+            router.navigate(['/login']);
+            return throwError(() => error);
+          }),
+        );
       }
 
       if (error.status === 403) {
@@ -17,7 +28,6 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       }
 
       if (error.status === 0) {
-
         console.error('Sin conexión al servidor.');
       }
 
@@ -25,8 +35,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         console.error('Error interno del servidor.');
       }
 
-      
       return throwError(() => error);
-    })
+    }),
   );
 };
