@@ -1,5 +1,5 @@
 import { Category } from '../../categories/models/category.interface';
-import { Store } from '../../stores/models/store.interface';
+import { Store } from '../../stores/interfaces/store.interface';
 
 export interface Product {
   id: number;
