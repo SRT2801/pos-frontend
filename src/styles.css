@@ -1,84 +1,54 @@
 /* You can add global styles to this file, and also import other style files */
-
 @import 'tailwindcss';
 @import 'primeicons/primeicons.css';
+
+/* Configuración de Tailwind v4 y colores globales unificados */
+@theme {
+  --color-primary: #0056b2; /* Tu azul principal unificado */
+  --color-primary-hover: #004494;
+  --color-primary-light: #e6f0fa;
+
+  --color-background-light: #f5f7f8;
+  --color-background-dark: #0f1923;
+  --color-surface: #ffffff;
+  --color-surface-hover: #f1f5f9;
+
+  /* Fuente base */
+  --font-sans: 'Inter', sans-serif;
+  --font-display: 'Inter', sans-serif;
+}
+
+/* Configuracion manual de variables para soportar editores que aun no entienden @theme de tailwind v4 */
+:root {
+  --color-primary: #0056b2;
+  --color-primary-hover: #004494;
+  --color-primary-light: #e6f0fa;
+  --color-background-light: #f5f7f8;
+  --color-background-dark: #0f1923;
+  --color-surface: #ffffff;
+  --color-surface-hover: #f1f5f9;
+}
 
 * {
   box-sizing: border-box;
 }
 
-:root {
-  --color-primary: #0a53e4;
-  --color-primary-container: #e3edfd;
-  --color-on-primary: #fff;
-  --color-outline: #d1d5db;
-  --color-error-container: #fee2e2;
-  --color-inverse-primary: #93c5fd;
-  --color-outline-variant: #94a3b8;
-  --color-tertiary-container: #e2e8f0;
-  --color-surface-container: #f1f5f9;
-  --color-on-tertiary: #ffffff;
-  --on-surface-variant: #475569;
-  --surface-container-highest: #cbd5e1;
-  --primary: #0056b2;
-  --inverse-on-surface: #f8fafc;
-  --on-primary-fixed-variant: #1d4ed8;
-  --surface-variant: #f1f5f9;
-  --on-tertiary-container: #1e293b;
-  --background: #f5f7f8;
-  --error: #ef4444;
-  --on-secondary-fixed: #0f172a;
-  --surface-container-high: #e2e8f0;
-  --surface-tint: #0056b2;
-  --outline: #cbd5e1;
-  --secondary-container: #f1f5f9;
-  --surface: #ffffff;
-  --on-tertiary-fixed-variant: #1e293b;
-  --on-tertiary-fixed: #0f172a;
-  --tertiary-fixed: #f8fafc;
-  --primary-container: #dbeafe;
-  --secondary-fixed-dim: #e2e8f0;
-  --on-secondary-fixed-variant: #334155;
-  --on-surface: #0f172a;
-  --secondary: #475569;
-  --surface-bright: #ffffff;
-  --on-primary-fixed: #1e3a8a;
-  --secondary-fixed: #f1f5f9;
-  --primary-fixed: #dbeafe;
-  --primary-fixed-dim: #bfdbfe;
-  --on-primary: #ffffff;
-  --inverse-surface: #1e293b;
-  --on-secondary: #ffffff;
-  --on-secondary-container: #334155;
-  --on-error: #ffffff;
-  --on-background: #0f172a;
-  --tertiary-fixed-dim: #f1f5f9;
-  --on-primary-container: #1e40af;
-  --surface-dim: #f5f7f8;
-  --tertiary: #0f172a;
-  --surface-container-low: #f8fafc;
-  --surface-container-lowest: #ffffff;
-  --on-error-container: #991b1b;
-  /* ...otros colores */
+body {
+  background-color: var(--color-background-light);
+  color: #0f172a;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Clases de utilidad auxiliares por si las tienes en algunos HTML antiguos */
+.text-primary {
+  color: var(--color-primary) !important;
 }
 .bg-primary {
   background-color: var(--color-primary) !important;
 }
-.text-primary {
-  color: var(--color-primary) !important;
+.bg-surface {
+  background-color: var(--color-surface) !important;
 }
-.bg-primary-container {
-  background-color: var(--color-primary-container) !important;
-}
-.text-on-primary {
-  color: var(--color-on-primary) !important;
-}
-.bor body {
-  background-color: var(--color-bg);
-  color: var(--color-text);
-}
-
-.button-primary {
-  background-color: var(--color-primary);
-  color: #fff;
+.border-primary {
+  border-color: var(--color-primary) !important;
 }
