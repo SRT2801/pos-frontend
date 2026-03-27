@@ -66,7 +66,7 @@ export class PasswordInputComponent {
   @Input() autofocus = false;
   @Input() readonly = false;
   @Input() inputClass =
-    'form-input h-12 w-full rounded-lg border border-slate-200 bg-white px-4 py-2 pr-11 text-base text-slate-900 placeholder:text-slate-400 focus:border-blue-700 focus:ring-2 focus:ring-blue-700/20 focus:outline-none sm:h-14 sm:pr-12';
+    'form-input h-12 w-full rounded-lg border border-slate-200 bg-white px-4 py-2 pr-11 text-base text-slate-900 placeholder:text-slate-400 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none sm:h-14 sm:pr-12';
   @Input() model = signal<string>('');
   @Input() icon?: string;
   show = signal(false);

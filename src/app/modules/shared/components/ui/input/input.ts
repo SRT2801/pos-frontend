@@ -59,7 +59,7 @@ export class InputComponent {
   @Input() autofocus = false;
   @Input() readonly = false;
   @Input() inputClass =
-    'w-full pl-10 pr-4 py-3 bg-surface-container-low border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-primary transition-all duration-200 outline-none ';
+    'w-full pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200 outline-none ';
   @Input() model = signal<string>('');
   @Input() icon?: string;
 }
