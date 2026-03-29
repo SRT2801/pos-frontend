@@ -25,29 +25,13 @@ import { MessageService } from 'primeng/api';
 
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
-export function initAuth() {
-  const authService = inject(AuthService);
-  const platformId = inject(PLATFORM_ID);
 
-  if (!isPlatformBrowser(platformId)) {
-    return Promise.resolve();
-  }
-
-  return firstValueFrom(
-    authService.loadProfile().pipe(
-      catchError(() => {
-        return of(null);
-      }),
-    ),
-  );
-}
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
-    provideAppInitializer(initAuth),
     provideHttpClient(
       withFetch(),
       withInterceptors([storeIterceptor, authInterceptor, errorInterceptor]),
