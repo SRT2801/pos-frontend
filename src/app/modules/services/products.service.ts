@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { API_BASE_URL } from '../../app.config';
-import { Product } from '../products/models/product.interface';
+import { Product } from '../products/interfaces/product.interface';
 import { CreateProductDto } from '../products/dto/create-product.dto';
 
 @Injectable({ providedIn: 'root' })
