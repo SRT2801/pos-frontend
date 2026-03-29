@@ -5,6 +5,15 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from '../../../../../environments/environment';
 
+
+const AUTH_ENDPOINTS = [
+  '/auth/refresh',
+  '/auth/signin',
+  '/auth/signup',
+  '/auth/signout',
+  '/auth/register-store',
+];
+
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const http = inject(HttpClient);
   const router = inject(Router);
@@ -12,15 +21,23 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
       if (error.status === 401) {
-        return http.post(`${environment.apiUrl}/auth/refresh`, {}, { withCredentials: true }).pipe(
-          switchMap(() => next(req)),
-          catchError((refreshError) => {
-            const mensaje = error.error?.message || 'No autorizado';
-            console.error({ mensaje });
-            router.navigate(['/login']);
-            return throwError(() => error);
-          }),
-        );
+        
+        const isAuthEndpoint = AUTH_ENDPOINTS.some((ep) => req.url.includes(ep));
+        if (isAuthEndpoint) {
+          router.navigate(['/login']);
+          return throwError(() => error);
+        }
+
+        
+        return http
+          .post(`${environment.apiUrl}/auth/refresh`, {}, { withCredentials: true })
+          .pipe(
+            switchMap(() => next(req)),
+            catchError(() => {
+              router.navigate(['/login']);
+              return throwError(() => error);
+            }),
+          );
       }
 
       if (error.status === 403) {
