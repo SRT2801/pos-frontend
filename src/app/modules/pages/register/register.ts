@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { registerSchema } from '../../shared/schemas/register.schema';
 import { AuthService } from '../../services/auth.service';
 import { ToastService } from '../../services/toast.service';
@@ -28,19 +28,9 @@ export class RegisterPage {
   showPassword = signal(false);
   showConfirmPassword = signal(false);
 
-  constructor(
-    private authService: AuthService,
-    private toast: ToastService,
-    private spinner: ProgressSpinnerService,
-  ) {
-    this.email.set('');
-    this.password.set('');
-    this.confirmPassword.set('');
-    this.error.set('');
-    this.success.set('');
-    this.emailError.set('');
-    this.passwordError.set('');
-  }
+  private authService = inject(AuthService);
+  private toast = inject(ToastService);
+  private spinner = inject(ProgressSpinnerService);
 
   get passwordsMatch() {
     return this.password() === this.confirmPassword() && this.confirmPassword() !== '';
