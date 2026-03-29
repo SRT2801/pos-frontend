@@ -12,49 +12,86 @@ export class AuthService {
   currentStoreContext = signal<StoreContext | null>(null);
   userStores = signal<StoreContext[]>([]);
 
-
   isLoggedIn = computed(() => this.currentUser() !== null);
-
 
   userRoles = computed(() => {
     const context = this.currentStoreContext();
-    return context ? [context.role] : [];
+    const user = this.currentUser();
+    const roles: string[] = [];
+
+
+    if (user?.globalRole) {
+      roles.push(user.globalRole);
+    }
+
+    if (context?.role) {
+      roles.push(context.role);
+    }
+    return roles;
   });
 
   userPermissions = computed(() => {
     const context = this.currentStoreContext();
-    return context ? context.permissions : [];
+    return context ? context.permissions || [] : [];
   });
 
-  constructor(private http: HttpClient) {}
-
- 
-  loadProfile(): Observable<AuthResponse> {
-    const url = `${environment.apiUrl}/auth/me`;
-    return this.http
-      .get<AuthResponse>(url, { withCredentials: true })
-      .pipe(tap((response) => this.setAuthData(response)));
+  constructor(private http: HttpClient) {
+    this.hydrateAuth();
   }
 
+  hydrateAuth() {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      try {
+        const storedUser = localStorage.getItem('currentUser');
+        const storedContext = localStorage.getItem('currentStoreContext');
+        const storedStores = localStorage.getItem('userStores');
+
+        if (storedUser) this.currentUser.set(JSON.parse(storedUser));
+        if (storedContext) this.currentStoreContext.set(JSON.parse(storedContext));
+        if (storedStores) this.userStores.set(JSON.parse(storedStores));
+      } catch (e) {
+        console.error('Error parsing auth state from localStorage', e);
+      }
+    }
+  }
 
   private setAuthData(response: AuthResponse) {
     this.currentUser.set(response.user);
     this.userStores.set(response.stores || []);
-    this.currentStoreContext.set(response.currentContext || null);
+
+
+    const initialContext = response.currentContext
+      || (response.stores?.length ? response.stores[0] : null);
+
+    this.currentStoreContext.set(initialContext);
+
+
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.setItem('currentUser', JSON.stringify(response.user));
+      localStorage.setItem('userStores', JSON.stringify(response.stores || []));
+      if (initialContext) {
+        localStorage.setItem('currentStoreContext', JSON.stringify(initialContext));
+        localStorage.setItem('storeId', initialContext.id);
+      } else {
+        localStorage.removeItem('currentStoreContext');
+        localStorage.removeItem('storeId');
+      }
+    }
   }
+
 
   hasRole(allowedRoles: Role[] | Role): boolean {
     const rolesArray = Array.isArray(allowedRoles) ? allowedRoles : [allowedRoles];
-    const currentRoles = this.userRoles();
-    return rolesArray.some((role) => currentRoles.includes(role));
+    const currentRoles = this.userRoles() as string[];
+    return rolesArray.some((role) => currentRoles.includes(role as string));
   }
 
   hasPermission(allowedPermissions: Permission[] | Permission): boolean {
     const permissionsArray = Array.isArray(allowedPermissions)
       ? allowedPermissions
       : [allowedPermissions];
-    const currentPermissions = this.userPermissions();
-    return permissionsArray.some((permission) => currentPermissions.includes(permission));
+    const currentPermissions = this.userPermissions() as string[];
+    return permissionsArray.some((permission) => currentPermissions.includes(permission as string));
   }
 
   register(user: { email: string; password: string }): Observable<any> {
@@ -86,6 +123,12 @@ export class AuthService {
         this.currentUser.set(null);
         this.currentStoreContext.set(null);
         this.userStores.set([]);
+        if (typeof window !== 'undefined' && window.localStorage) {
+          localStorage.removeItem('currentUser');
+          localStorage.removeItem('currentStoreContext');
+          localStorage.removeItem('userStores');
+          localStorage.removeItem('storeId');
+        }
       }),
     );
   }
