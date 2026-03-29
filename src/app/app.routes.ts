@@ -4,6 +4,7 @@ import { RegisterPage } from './modules/pages/register/register';
 import { Layout } from './modules/shared/layout/layout';
 import { Home } from './modules/pages/home/home';
 import { RegisterStore } from './modules/pages/register-store/register-store';
+import { DashboardComponent } from './modules/pages/dashboard/dashboard';
 
 export const routes: Routes = [
   {
@@ -17,6 +18,7 @@ export const routes: Routes = [
     component: Layout,
     children: [
       { path: 'home', component: Home },
+      { path: 'dashboard', component: DashboardComponent },
       {
         path: 'login',
         component: LoginComponent,
