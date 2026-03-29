@@ -1,7 +1,7 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { InputComponent } from '../../shared/components/ui/input/input';
 import { PasswordInputComponent } from '../../shared/components/ui/input/password-input';
 import { AuthService } from '../../services/auth.service';
@@ -9,6 +9,7 @@ import { AuthService } from '../../services/auth.service';
 import { loginSchema } from '../../shared/schemas/login.schema';
 import { ProgressSpinnerService } from '../../services/progress-spinner.service';
 import { ToastService } from '../../services/toast.service';
+import { Role } from '../../core/enums/role.enum';
 
 @Component({
   selector: 'app-login',
@@ -29,17 +30,10 @@ export class LoginComponent {
     this.showPassword.set(!this.showPassword());
   }
 
-  constructor(
-    private authService: AuthService,
-    private spinner: ProgressSpinnerService,
-    private toast: ToastService,
-  ) {
-    this.email.set('');
-    this.password.set('');
-    this.emailError.set('');
-    this.error.set('');
-    this.success.set('');
-  }
+  private authService = inject(AuthService);
+  private spinner = inject(ProgressSpinnerService);
+  private toast = inject(ToastService);
+  private router = inject(Router);
 
   login() {
     this.error.set('');
@@ -70,11 +64,17 @@ export class LoginComponent {
     this.error.set('');
     this.spinner.show();
     this.authService.login(formdata).subscribe({
-      next: () => {
+      next: (response) => {
         this.toast.success('Login successful');
         this.email.set('');
         this.password.set('');
         this.spinner.hide();
+        
+        if (this.authService.hasRole(Role.CUSTOMER)) {
+          this.router.navigate(['/home']);
+        } else {
+          this.router.navigate(['/dashboard']);
+        }
       },
       error: (err) => {
         const message = err.error?.message || 'Login failed';
