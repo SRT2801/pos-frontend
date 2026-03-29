@@ -1,4 +1,4 @@
-import { Category } from '../../categories/models/category.interface';
+import { Category } from '../../categories/interfaces/category.interface';
 import { Store } from '../../stores/interfaces/store.interface';
 
 export interface Product {
