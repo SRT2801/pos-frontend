@@ -1,0 +1,224 @@
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-6">
+  <!-- Product Gallery (Left Column) -->
+  <div class="col-span-12 lg:col-span-4 space-y-6">
+    <div class="bg-surface rounded-xl p-4 shadow-sm border border-outline-variant">
+      <div class="aspect-square rounded-lg overflow-hidden bg-slate-100 mb-4 flex items-center justify-center">
+        <img *ngIf="product.images" [src]="getImageUrl(product.images)" [alt]="product.name"
+          class="w-full h-full object-contain" />
+        <span *ngIf="!product.images" class="material-symbols-outlined text-6xl text-slate-300">image</span>
+      </div>
+      <div class="grid grid-cols-4 gap-2">
+        <div
+          class="aspect-square rounded border-2 border-primary overflow-hidden cursor-pointer flex items-center justify-center bg-slate-50">
+          <img *ngIf="product.images" [src]="getImageUrl(product.images)" class="w-full h-full object-cover" />
+          <span *ngIf="!product.images" class="material-symbols-outlined text-slate-300">image</span>
+        </div>
+        <div
+          class="aspect-square rounded border border-outline-variant overflow-hidden cursor-pointer opacity-60 hover:opacity-100 transition-opacity bg-slate-50">
+        </div>
+        <div
+          class="aspect-square rounded border border-outline-variant overflow-hidden cursor-pointer opacity-60 hover:opacity-100 transition-opacity bg-slate-50">
+        </div>
+        <div
+          class="aspect-square rounded border border-outline-variant bg-surface-container flex items-center justify-center text-slate-400 cursor-pointer">
+          <span class="material-symbols-outlined">add</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Attributes Card -->
+    <div class="bg-surface rounded-xl p-6 shadow-sm border border-outline-variant">
+      <h3 class="text-lg font-bold text-on-surface mb-4">Core Specifications</h3>
+      <div class="space-y-4">
+        @for (spec of mockedSpecs; track spec.label) {
+        <div class="flex justify-between items-center pb-3 border-b border-outline-variant last:border-b-0">
+          <span class="text-xs font-bold uppercase text-slate-400 tracking-wider">{{ spec.label }}</span>
+          <span class="text-sm font-semibold">{{ spec.value }}</span>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Product Data (Middle/Right Columns) -->
+  <div class="col-span-12 lg:col-span-8 space-y-6">
+    <!-- Performance Quick Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="bg-surface p-6 rounded-xl border border-outline-variant shadow-sm">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-[10px] font-bold uppercase text-slate-400 tracking-widest">Total Sales (30d)</span>
+          <span class="text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full text-[10px] font-bold">{{
+            mockedStats.sales.change }}</span>
+        </div>
+        <div class="text-2xl font-black">{{ mockedStats.sales.value }}</div>
+        <div class="mt-4 h-1 w-full bg-slate-100 rounded-full overflow-hidden">
+          <div class="h-full bg-primary" style="width: 65%"></div>
+        </div>
+      </div>
+      <div class="bg-surface p-6 rounded-xl border border-outline-variant shadow-sm">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-[10px] font-bold uppercase text-slate-400 tracking-widest">Revenue (30d)</span>
+          <span class="text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full text-[10px] font-bold">{{
+            mockedStats.revenue.change }}</span>
+        </div>
+        <div class="text-2xl font-black">{{ mockedStats.revenue.value }}</div>
+        <div class="mt-4 h-1 w-full bg-slate-100 rounded-full overflow-hidden">
+          <div class="h-full bg-tertiary" style="width: 48%"></div>
+        </div>
+      </div>
+      <div class="bg-surface p-6 rounded-xl border border-outline-variant shadow-sm">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-[10px] font-bold uppercase text-slate-400 tracking-widest">Stock Level</span>
+          <span class="text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full text-[10px] font-bold">{{
+            mockedStats.stockStatus.level }}</span>
+        </div>
+        <div class="text-2xl font-black">{{ product.inventory }} <span
+            class="text-sm font-medium text-slate-400 uppercase">units</span></div>
+        <div class="mt-4 h-1 w-full bg-slate-100 rounded-full overflow-hidden">
+          <div class="h-full bg-amber-500" [style.width]="mockedStats.stockStatus.fill"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Description & Pricing Strategy -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-surface rounded-xl p-6 shadow-sm border border-outline-variant">
+        <h3 class="text-lg font-bold text-on-surface mb-3">Descripción del Producto</h3>
+        <p class="text-sm text-on-surface-variant leading-relaxed">
+          {{ product.description || 'No description provided.' }}
+        </p>
+        <div class="mt-6">
+          <div class="text-[10px] font-bold uppercase text-slate-400 tracking-widest mb-2">Internal Notes</div>
+          <div class="bg-surface-container-low p-3 rounded-lg text-xs font-medium border-l-4 border-primary">
+            Primary promo item for Q3 Summer Campaign. Ensure display compliance at checkouts.
+          </div>
+        </div>
+      </div>
+      <div class="bg-surface rounded-xl p-6 shadow-sm border border-outline-variant">
+        <h3 class="text-lg font-bold text-on-surface mb-4">Pricing Strategy</h3>
+        <div class="space-y-4">
+          <div class="flex justify-between items-center">
+            <span class="text-sm font-medium text-slate-500">Retail MSRP</span>
+            <span class="text-lg font-black text-on-surface">${{ product.price }}</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-sm font-medium text-slate-500">Wholesale Price</span>
+            <span class="text-lg font-black text-on-surface">${{ (product.price * 0.6).toFixed(2) }}</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-sm font-medium text-slate-500">Gross Margin</span>
+            <span class="text-lg font-black text-emerald-600">40%</span>
+          </div>
+          <div class="pt-4 mt-2 border-t border-slate-100">
+            <div class="text-[10px] font-bold uppercase text-slate-400 tracking-widest mb-3">Recent Price Adjustments
+            </div>
+            <div class="flex gap-2">
+              <span class="bg-slate-100 text-slate-600 text-[10px] font-bold px-2 py-1 rounded">-$0.10 (Promo
+                Jun)</span>
+              <span class="bg-slate-100 text-slate-600 text-[10px] font-bold px-2 py-1 rounded">+$0.05 (Logistics
+                May)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Inventory Across Warehouses -->
+    <div class="bg-surface rounded-xl shadow-sm border border-outline-variant overflow-hidden">
+      <div class="px-6 py-4 border-b border-outline-variant flex justify-between items-center">
+        <h3 class="text-lg font-bold text-on-surface">Warehouse Distribution</h3>
+        <button class="text-xs font-bold text-primary uppercase tracking-widest">Update All</button>
+      </div>
+      <table class="w-full text-left text-sm">
+        <thead class="bg-surface-container-low">
+          <tr>
+            <th class="px-6 py-3 font-bold text-slate-500 text-[10px] uppercase tracking-wider">Warehouse Location</th>
+            <th class="px-6 py-3 font-bold text-slate-500 text-[10px] uppercase tracking-wider">Current Stock</th>
+            <th class="px-6 py-3 font-bold text-slate-500 text-[10px] uppercase tracking-wider">Threshold</th>
+            <th class="px-6 py-3 font-bold text-slate-500 text-[10px] uppercase tracking-wider">Status</th>
+            <th class="px-6 py-3 font-bold text-slate-500 text-[10px] uppercase tracking-wider">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-outline-variant">
+          @for (wh of mockedWarehouses; track wh.location) {
+          <tr class="hover:bg-slate-50 transition-colors">
+            <td class="px-6 py-4 font-semibold">{{ wh.location }}</td>
+            <td class="px-6 py-4">{{ wh.stock }}</td>
+            <td class="px-6 py-4">{{ wh.threshold }}</td>
+            <td class="px-6 py-4">
+              <span
+                [class]="'px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-' + wh.statusColor + '-100 text-' + wh.statusColor + '-800'">
+                {{ wh.status }}
+              </span>
+            </td>
+            <td class="px-6 py-4">
+              <span class="material-symbols-outlined text-slate-400 cursor-pointer hover:text-primary">more_vert</span>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Sales Performance Chart Placeholder -->
+    <div class="bg-surface rounded-xl p-6 shadow-sm border border-outline-variant">
+      <div class="flex justify-between items-center mb-6">
+        <div>
+          <h3 class="text-lg font-bold text-on-surface">Sales Velocity</h3>
+          <p class="text-[10px] font-bold uppercase text-slate-400 tracking-widest">Rolling 30 days data</p>
+        </div>
+        <div class="flex gap-2">
+          <button class="px-3 py-1 bg-surface-container text-[10px] font-bold uppercase rounded-lg">Week</button>
+          <button class="px-3 py-1 bg-primary text-white text-[10px] font-bold uppercase rounded-lg">Month</button>
+          <button class="px-3 py-1 bg-surface-container text-[10px] font-bold uppercase rounded-lg">Year</button>
+        </div>
+      </div>
+      <div class="h-64 flex items-end justify-between gap-2 px-2">
+        <!-- Simulated Chart Bars -->
+        <div
+          class="w-full bg-slate-100 rounded-t h-[40%] hover:bg-primary transition-colors cursor-pointer group relative">
+          <div
+            class="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+            342 units</div>
+        </div>
+        <div
+          class="w-full bg-slate-100 rounded-t h-[55%] hover:bg-primary transition-colors cursor-pointer group relative">
+        </div>
+        <div
+          class="w-full bg-slate-100 rounded-t h-[75%] hover:bg-primary transition-colors cursor-pointer group relative">
+        </div>
+        <div
+          class="w-full bg-slate-100 rounded-t h-[60%] hover:bg-primary transition-colors cursor-pointer group relative">
+        </div>
+        <div
+          class="w-full bg-primary rounded-t h-[90%] hover:bg-primary transition-colors cursor-pointer group relative">
+          <div
+            class="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+            Peak: 812 units</div>
+        </div>
+        <div
+          class="w-full bg-slate-100 rounded-t h-[45%] hover:bg-primary transition-colors cursor-pointer group relative">
+        </div>
+        <div
+          class="w-full bg-slate-100 rounded-t h-[50%] hover:bg-primary transition-colors cursor-pointer group relative">
+        </div>
+        <div
+          class="w-full bg-slate-100 rounded-t h-[65%] hover:bg-primary transition-colors cursor-pointer group relative">
+        </div>
+        <div
+          class="w-full bg-slate-100 rounded-t h-[40%] hover:bg-primary transition-colors cursor-pointer group relative">
+        </div>
+        <div
+          class="w-full bg-slate-100 rounded-t h-[55%] hover:bg-primary transition-colors cursor-pointer group relative">
+        </div>
+        <div
+          class="w-full bg-slate-100 rounded-t h-[80%] hover:bg-primary transition-colors cursor-pointer group relative">
+        </div>
+        <div
+          class="w-full bg-slate-100 rounded-t h-[60%] hover:bg-primary transition-colors cursor-pointer group relative">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
