@@ -28,10 +28,16 @@ export class ProductsPage implements OnInit {
   readonly error = signal<string | null>(null);
 
   readonly totalProducts = signal<number>(0);
-  readonly pageSize = signal<number>(10);
+
+  getImageUrl(image: string | string[] | undefined): string {
+    if (!image) return 'images/default-product.png';
+    return Array.isArray(image) ? image[0] : image;
+  }
+
+  readonly itemsPerPage = 8;
   readonly currentPage = signal<number>(1);
 
-  readonly totalPages = computed(() => Math.ceil(this.totalProducts() / this.pageSize()));
+  readonly totalPages = computed(() => Math.ceil(this.totalProducts() / this.itemsPerPage));
 
   readonly searchQuery = signal('');
   readonly selectedCategory = signal('all');
@@ -56,22 +62,20 @@ export class ProductsPage implements OnInit {
     this.loading.set(true);
     this.error.set(null);
 
-    const skip = (this.currentPage() - 1) * this.pageSize();
+    const skip = (this.currentPage() - 1) * this.itemsPerPage;
 
-    this.productsService.getProducts(this.pageSize(), skip).subscribe({
-      next: (response) => {
-        this.totalProducts.set(response.total || response.products.length); // fallback length
-
-        const mappedProducts: ProductCardData[] = response.products.map((p) => ({
+    this.productsService.getProducts(this.itemsPerPage, skip).subscribe({
+      next: (data) => {
+        const mappedProducts: ProductCardData[] = data.products.map((p) => ({
           id: p.id,
           name: p.name,
           description: p.description,
-          price: typeof p.price === 'string' ? parseFloat(p.price) : p.price,
-          image: p.image || 'images/default-product.png',
+          price: p.price,
           inventory: p.inventory,
           categoryId: p.categoryId,
-          bgColor: '#f0f4f8',
+          image: p.images || ['images/default-product.png'],
         }));
+
         this.products.set(mappedProducts);
         this.loading.set(false);
       },

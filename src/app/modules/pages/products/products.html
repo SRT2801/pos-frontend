@@ -48,31 +48,37 @@
 
     <!-- Rows -->
     <ng-template appTableRow let-product>
-      <td class="px-6 py-4">
+      <td class="px-6 py-4 cursor-pointer hover:bg-slate-50 transition-colors" [routerLink]="['/products', product.id]">
         <div class="flex items-center gap-3">
           <div class="h-10 w-10 rounded-lg overflow-hidden border border-slate-200 bg-slate-100 shrink-0 shadow-sm">
-            <img [src]="product.image" [alt]="product.name" class="w-full h-full object-cover">
+            <img [src]="getImageUrl(product.image)" [alt]="product.name" class="w-full h-full object-cover">
           </div>
           <div>
-            <p class="text-sm font-bold text-slate-900 truncate max-w-50">{{ product.name }}</p>
+            <p class="text-sm font-bold text-slate-900 truncate max-w-50 hover:text-primary transition-colors">{{
+              product.name }}</p>
             <p class="text-xs text-slate-500 font-semibold mt-0.5">Cat: {{ product.categoryId }}</p>
           </div>
         </div>
       </td>
-      <td class="px-6 py-4">
+      <td class="px-6 py-4 cursor-pointer hover:bg-slate-50 transition-colors" [routerLink]="['/products', product.id]">
         <p class="text-sm text-slate-600 truncate max-w-64">{{ product.description || 'Sin descripción' }}</p>
       </td>
-      <td class="px-6 py-4">
+      <td class="px-6 py-4 cursor-pointer hover:bg-slate-50 transition-colors" [routerLink]="['/products', product.id]">
         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold shadow-sm"
           [ngClass]="product.inventory > 10 ? 'bg-emerald-100 text-emerald-800 border border-emerald-200/50' : 'bg-amber-100 text-amber-800 border border-amber-200/50'">
           {{ product.inventory }} en stock
         </span>
       </td>
-      <td class="px-6 py-4">
+      <td class="px-6 py-4 cursor-pointer hover:bg-slate-50 transition-colors" [routerLink]="['/products', product.id]">
         <span class="text-sm font-bold text-slate-900">${{ product.price | number:'1.2-2' }}</span>
       </td>
       <td class="px-6 py-4 text-right">
         <div class="flex items-center justify-end gap-2">
+          <button [routerLink]="['/products', product.id]"
+            class="text-slate-400 hover:text-blue-500 transition-colors p-2 rounded-lg hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+            title="Ver detalle">
+            <i class="pi pi-eye"></i>
+          </button>
           <button
             class="text-slate-400 hover:text-primary transition-colors p-2 rounded-lg hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-primary/40"
             title="Editar">
