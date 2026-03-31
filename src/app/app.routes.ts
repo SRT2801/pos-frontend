@@ -7,6 +7,7 @@ import { RegisterStore } from './modules/pages/register-store/register-store';
 import { DashboardComponent } from './modules/pages/dashboard/dashboard';
 import { ProductsPage } from './modules/pages/products/products';
 import { CreateProductPage } from './modules/pages/create-product/create-product';
+import { ProductDetailPage } from './modules/pages/product-detail/product-detail';
 
 export const routes: Routes = [
   {
@@ -40,6 +41,10 @@ export const routes: Routes = [
       {
         path: 'products/create',
         component: CreateProductPage,
+      },
+      {
+        path: 'products/:id',
+        component: ProductDetailPage,
       },
     ],
   },
