@@ -3,19 +3,29 @@
 @import 'primeicons/primeicons.css';
 
 /* Configuración de Tailwind v4 y colores globales unificados */
-@theme {
-  --color-primary: #0056b2; /* Tu azul principal unificado */
-  --color-primary-hover: #004494;
-  --color-primary-light: #e6f0fa;
+@layer theme {
+  :root {
+    --color-primary: #0056b2; /* Tu azul principal unificado */
+    --color-primary-hover: #004494;
+    --color-primary-light: #e6f0fa;
 
-  --color-background-light: #f5f7f8;
-  --color-background-dark: #0f1923;
-  --color-surface: #ffffff;
-  --color-surface-hover: #f1f5f9;
+    --color-background-light: #f5f7f8;
+    --color-background-dark: #0f1923;
+    --color-surface: #ffffff;
+    --color-surface-hover: #f1f5f9;
 
-  /* Fuente base */
-  --font-sans: 'Inter', sans-serif;
-  --font-display: 'Inter', sans-serif;
+    --color-outline: #cbd5e1;
+    --color-outline-variant: #e2e8f0;
+    --color-on-surface: #0f172a;
+    --color-on-surface-variant: #475569;
+    --color-surface-container: #f1f5f9;
+    --color-surface-container-low: #f8fafc;
+    --color-tertiary: #0d9488;
+
+    /* Fuente base */
+    --font-sans: 'Inter', sans-serif;
+    --font-display: 'Inter', sans-serif;
+  }
 }
 
 /* Configuracion manual de variables para soportar editores que aun no entienden @theme de tailwind v4 */
