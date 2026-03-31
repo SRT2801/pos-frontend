@@ -7,12 +7,20 @@ import { SidebarStateService } from '../services/sidebarState.service';
 import { ToastModule } from 'primeng/toast';
 import { usesMinimalLayout } from './minimal-layout.util';
 import { AppProgressSpinner } from '../components/ui/progress-spinner/progress-spinner';
-import { ProgressSpinnerService } from '../../services/progress-spinner.service';
+import { ProgressSpinnerService } from '../services/progress-spinner.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-layout',
-  imports: [RouterModule, FormsModule, Sidebar, Header, ToastModule, AppProgressSpinner, CommonModule],
+  imports: [
+    RouterModule,
+    FormsModule,
+    Sidebar,
+    Header,
+    ToastModule,
+    AppProgressSpinner,
+    CommonModule,
+  ],
   templateUrl: './layout.html',
   styleUrl: './layout.css',
 })
