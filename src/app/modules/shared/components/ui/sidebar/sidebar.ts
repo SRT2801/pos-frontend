@@ -4,11 +4,11 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { AvatarModule } from 'primeng/avatar';
-import { AuthService } from '../../../../services/auth.service';
+import { AuthService } from '../../../services/auth.service';
 import { Role } from '../../../../core/enums/role.enum';
 import { SidebarOption } from '../interfaces/sidebar-option.interface';
-import { ToastService } from '../../../../services/toast.service';
-import { ProgressSpinnerService } from '../../../../services/progress-spinner.service';
+import { ToastService } from '../../../services/toast.service';
+import { ProgressSpinnerService } from '../../../services/progress-spinner.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -49,14 +49,14 @@ export class Sidebar {
       icon: 'pi pi-box',
       children: [
         {
-          label: 'Lista',
+          label: 'Tus Productos',
           icon: 'pi pi-list',
           route: '/products',
         },
         {
-          label: 'Agregar',
+          label: 'Agregar Productos',
           icon: 'pi pi-plus',
-          route: '/products/add',
+          route: 'products/create',
           roles: [Role.OWNER, Role.ADMIN],
         },
       ],
