@@ -1,0 +1,32 @@
+<div class="h-full w-full">
+    @if (product()) {
+
+
+
+    <!-- Header Actions -->
+    <div class="flex justify-between items-end mb-8">
+        <div>
+            <h1 class="text-3xl font-black text-on-surface tracking-tighter">{{ product()?.name }}</h1>
+            <p class="text-slate-500 font-medium mt-1">
+                SKU: PRD-{{ product()?.id | number:'4.0-0' }} &bull;
+                Category: {{ product()?.category?.name || 'Uncategorized' }}
+            </p>
+        </div>
+        <div class="flex gap-3">
+
+            <button (click)="editProduct()"
+                class="flex items-center gap-2 px-6 py-2.5 bg-primary text-white font-semibold rounded-lg hover:opacity-90 transition-opacity shadow-sm">
+                <i class="material-symbols-outlined pi pi-pen-to-square"></i>
+                <span class="text-sm">Edit Product</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Reusable Component -->
+    <app-product-detail [product]="product()!"></app-product-detail>
+    } @else {
+    <div class="flex justify-center items-center h-full">
+        <p class="text-slate-500">Loading product details...</p>
+    </div>
+    }
+</div>
