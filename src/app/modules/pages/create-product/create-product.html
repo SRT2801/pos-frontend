@@ -1,0 +1,203 @@
+<div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+  <div class="mb-8">
+    <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">Crear Nuevo Producto</h1>
+    <p class="text-slate-500 mt-1">Configura la entrada de tu catálogo con precisión técnica.</p>
+  </div>
+
+  @if (error()) {
+  <div class="mb-6 rounded-lg bg-red-50 p-4 border border-red-200 flex items-start gap-3" role="alert"
+    aria-live="assertive">
+    <i class="pi pi-exclamation-circle text-red-500 text-xl mt-0.5"></i>
+    <div class="flex-1">
+      <h3 class="text-sm font-semibold text-red-800">Error al guardar</h3>
+      <p class="text-sm text-red-700 mt-1">{{ error() }}</p>
+    </div>
+  </div>
+  }
+
+  <form (ngSubmit)="onSubmit()" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+    <!-- Main Form Column -->
+    <div class="lg:col-span-2 space-y-6">
+
+      <!-- Card: Product Details -->
+      <div class="bg-white rounded-xl shadow-sm p-6 border border-slate-200/60">
+        <h3 class="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
+          <i class="pi pi-info-circle text-primary text-xl"></i>
+          Detalles del Producto
+        </h3>
+
+        <div class="space-y-5">
+          <div>
+            <label for="name" class="block text-sm font-bold text-slate-900 mb-1.5">Nombre del Producto <span
+                class="text-red-500">*</span></label>
+            <app-input id="name" name="name" [model]="name" placeholder="Ej. Coca Cola 600ml"
+              ariaLabel="Nombre del producto"
+              inputClass="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:border-primary focus:ring-2 focus:ring-primary/10  outline-none"></app-input>
+          </div>
+
+          <div>
+            <label for="description" class="block text-sm font-bold text-slate-900 mb-1.5">Descripción</label>
+            <textarea id="description" name="description" [(ngModel)]="description" rows="4"
+              class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all resize-none outline-none"
+              placeholder="Provee una descripción detallada..." aria-label="Descripción del producto"></textarea>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <div class="flex justify-between items-end mb-1.5">
+                <label for="category" class="block text-sm font-bold text-slate-900">Categoría <span
+                    class="text-red-500">*</span></label>
+                @if (!isCreatingCategory()) {
+                <button type="button" (click)="isCreatingCategory.set(true)"
+                  class="text-xs font-bold text-primary hover:text-primary/80 flex items-center gap-1 transition-colors focus:outline-none focus:underline"
+                  aria-label="Crear nueva categoría">
+                  <i class="pi pi-plus"></i> Nueva
+                </button>
+                }
+              </div>
+
+              @if (!isCreatingCategory()) {
+              <div class="relative group animate-fade">
+                <select id="category" name="categoryId" [(ngModel)]="categoryId" required
+                  class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all appearance-none outline-none"
+                  aria-label="Categoría del producto">
+                  <option [ngValue]="null" disabled selected>Selecciona una categoría</option>
+                  <option *ngFor="let cat of categories()" [value]="cat.id">{{ cat.name }}</option>
+                </select>
+                <div
+                  class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400 group-hover:text-slate-600 transition-colors">
+                  <i class="pi pi-chevron-down text-sm"></i>
+                </div>
+              </div>
+              } @else {
+              <div class="flex items-center gap-2 animate-fade">
+                <app-input class="flex-1" id="newCategoryName" name="newCategoryName" [model]="newCategoryName"
+                  placeholder="Ej. Lentes" ariaLabel="Nombre de nueva categoría"
+                  inputClass="w-full px-4 py-2.5 bg-white border border-primary/50 rounded-lg text-sm focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all outline-none"></app-input>
+
+                <button type="button" (click)="createCategory()" [disabled]="isSavingCategory() || !newCategoryName()"
+                  class="shrink-0 h-10.5 px-3.5 bg-slate-900 text-white rounded-lg hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-900/40"
+                  aria-label="Guardar categoría">
+                  <i *ngIf="!isSavingCategory()" class="pi pi-check text-sm font-bold"></i>
+                  <i *ngIf="isSavingCategory()" class="pi pi-spin pi-spinner text-sm font-bold"></i>
+                </button>
+
+                <button type="button" (click)="cancelCreateCategory()" [disabled]="isSavingCategory()"
+                  class="shrink-0 h-10.5 px-3.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 disabled:opacity-50 transition-all flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-red-500/40"
+                  aria-label="Cancelar creación">
+                  <i class="pi pi-times text-sm font-bold"></i>
+                </button>
+              </div>
+              }
+            </div>
+
+            <div>
+              <label for="inventory" class="block text-sm font-bold text-slate-900 mb-1.5">Nivel de Inventario <span
+                  class="text-red-500">*</span></label>
+              <app-input type="number" id="inventory" name="inventory" [model]="inventory" placeholder="Ej. 100"
+                icon="pi-box" ariaLabel="Nivel de inventario"
+                inputClass="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:border-primary focus:ring-2 focus:ring-primary/10  outline-none"></app-input>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card: Pricing Strategy -->
+      <div class="bg-white rounded-xl shadow-sm p-6 border border-slate-200/60">
+        <h3 class="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
+          <i class="pi pi-dollar text-primary text-xl"></i>
+          Estrategia de Precios
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label for="price" class="block text-sm font-bold text-slate-900 mb-1.5">Precio Unitario (USD) <span
+                class="text-red-500">*</span></label>
+            <div class="relative group">
+              <span
+                class="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-slate-500 group-focus-within:text-primary">$</span>
+              <input type="number" step="0.01" id="price" name="price" [(ngModel)]="price" required
+                class="w-full pl-8 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all outline-none font-medium"
+                placeholder="0.00" aria-label="Precio unitario en dólares">
+            </div>
+            <p class="text-[10px] uppercase font-bold text-slate-400 mt-2 tracking-wider">MSRP por unidad individual</p>
+          </div>
+
+          <div class="bg-slate-100 p-4 rounded-lg flex items-center gap-4">
+            <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+              <i class="pi pi-chart-line text-lg"></i>
+            </div>
+            <div>
+              <p class="text-xs font-bold text-slate-900">El Precio unitario </p>
+              <p class="text-xs text-slate-500">Sera el precio que cada cliente pagará por el producto</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar Column -->
+    <div class="space-y-6">
+
+      <!-- Image Upload Card -->
+      <div class="bg-white rounded-xl shadow-sm p-6 border border-slate-200/60">
+        <h3 class="text-sm font-bold text-slate-900 mb-4 uppercase tracking-wider">Visual del Producto</h3>
+
+        <div class="relative group cursor-pointer">
+          <div
+            class="aspect-square rounded-lg overflow-hidden border border-slate-200 bg-slate-100 mb-4 flex items-center justify-center focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2">
+
+            <ng-container *ngIf="!imagePreview()">
+              <div
+                class="flex flex-col items-center justify-center text-slate-400 group-hover:text-primary transition-colors">
+                <i class="pi pi-cloud-upload text-3xl mb-2"></i>
+                <span class="text-xs font-medium">Subir imagen</span>
+              </div>
+            </ng-container>
+
+            <ng-container *ngIf="imagePreview()">
+              <img [src]="imagePreview()" alt="Previsualización" class="w-full h-full object-cover" />
+              <div
+                class="absolute inset-0 bg-slate-900/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <span class="text-white text-sm font-bold flex items-center gap-2">
+                  <i class="pi pi-pencil"></i> Cambiar
+                </span>
+              </div>
+            </ng-container>
+
+            <input type="file" (change)="onImageChange($event)" accept="image/png, image/jpeg"
+              class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              [attr.aria-label]="imagePreview() ? 'Cambiar imagen' : 'Subir imagen'" [attr.tabindex]="0" />
+          </div>
+        </div>
+
+        <div class="mt-4 pt-4 border-t border-slate-200">
+          <button type="button" (click)="removeImage()" *ngIf="imagePreview()"
+            class="w-full flex items-center justify-center gap-2 py-2 border-2 border-dashed border-red-200 rounded-lg text-red-400 hover:text-red-500 hover:border-red-400 transition-all text-sm font-bold mb-2">
+            <i class="pi pi-trash"></i> Eliminar
+          </button>
+          <button type="button"
+            class="w-full flex items-center justify-center gap-2 py-2 border-2 border-dashed border-slate-200 rounded-lg text-slate-400 hover:text-primary hover:border-primary transition-all text-sm font-bold">
+            <i class="pi pi-camera"></i> Añadir a la Galería
+          </button>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-col gap-3">
+        <button type="submit" [disabled]="loading()"
+          class="w-full py-3 bg-primary text-white font-bold rounded-lg shadow-sm hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
+          <i *ngIf="loading()" class="pi pi-spin pi-spinner"></i>
+          <i *ngIf="!loading()" class="pi pi-check-circle"></i>
+          Crear Producto
+        </button>
+        <button type="button" (click)="cancel()"
+          class="w-full py-3 bg-slate-100 text-slate-500 font-bold rounded-lg hover:bg-slate-200 transition-all flex items-center justify-center gap-2 active:scale-[0.98]">
+          <i class="pi pi-times-circle"></i>
+          Cancelar
+        </button>
+      </div>
+
+    </div>
+  </form>
+</div>
