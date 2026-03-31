@@ -43,14 +43,9 @@ export class ProductosService {
     this.cache.clear();
   }
 
-  uploadImage(file: File) {
+  uploadImages(files: File[]): Observable<string[]> {
     const formData = new FormData();
-    formData.append('file', file);
-    return this.http.post<{
-      url?: string;
-      secureUrl?: string;
-      secure_url?: string;
-      [key: string]: any;
-    }>(`${this.apiBase}/products/upload-image`, formData);
+    files.forEach((file) => formData.append('files', file));
+    return this.http.post<string[]>(`${this.apiBase}/products/upload-images`, formData);
   }
 }
