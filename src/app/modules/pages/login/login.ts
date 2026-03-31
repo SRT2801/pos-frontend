@@ -4,11 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink, Router } from '@angular/router';
 import { InputComponent } from '../../shared/components/ui/input/input';
 import { PasswordInputComponent } from '../../shared/components/ui/input/password-input';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../shared/services/auth.service';
 
 import { loginSchema } from '../../shared/schemas/login.schema';
-import { ProgressSpinnerService } from '../../services/progress-spinner.service';
-import { ToastService } from '../../services/toast.service';
+import { ProgressSpinnerService } from '../../shared/services/progress-spinner.service';
+import { ToastService } from '../../shared/services/toast.service';
 import { Role } from '../../core/enums/role.enum';
 
 @Component({
@@ -69,7 +69,7 @@ export class LoginComponent {
         this.email.set('');
         this.password.set('');
         this.spinner.hide();
-        
+
         if (this.authService.hasRole(Role.CUSTOMER)) {
           this.router.navigate(['/home']);
         } else {

@@ -1,13 +1,13 @@
 import { Component, inject, signal } from '@angular/core';
 import { registerSchema } from '../../shared/schemas/register.schema';
-import { AuthService } from '../../services/auth.service';
-import { ToastService } from '../../services/toast.service';
+import { AuthService } from '../../shared/services/auth.service';
+import { ToastService } from '../../shared/services/toast.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { InputComponent } from '../../shared/components/ui/input/input';
 import { PasswordInputComponent } from '../../shared/components/ui/input/password-input';
 import { RouterLink } from '@angular/router';
-import { ProgressSpinnerService  } from '../../services/progress-spinner.service';
+import { ProgressSpinnerService } from '../../shared/services/progress-spinner.service';
 
 @Component({
   imports: [CommonModule, FormsModule, InputComponent, PasswordInputComponent, RouterLink],
@@ -35,7 +35,6 @@ export class RegisterStore {
   private authService = inject(AuthService);
   private toast = inject(ToastService);
   private spinner = inject(ProgressSpinnerService);
-  
 
   get passwordsMatch() {
     return this.password() === this.confirmPassword() && this.confirmPassword() !== '';
