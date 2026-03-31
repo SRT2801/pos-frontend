@@ -3,10 +3,9 @@ export interface ProductCardData {
   name: string;
   description?: string;
   price: number;
-  image: string;
+  image: string | string[];
   inventory: number;
   categoryId: number;
-
 
   badge?: string;
   badgeType?: 'premium' | 'new' | 'popular' | 'sale';
