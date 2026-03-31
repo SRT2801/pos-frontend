@@ -1,20 +1,11 @@
 <article class="product-card" (click)="onViewProduct()">
   <!-- Image Container -->
   <div class="product-card__image-wrapper" [style.background-color]="product.bgColor || '#f0f4f8'">
-    <img
-      class="product-card__image"
-      [src]="product.image"
-      [alt]="product.name"
-      loading="lazy"
-    />
+    <img class="product-card__image" [src]="getImageUrl(product.image)" [alt]="product.name" loading="lazy" />
 
     <!-- Favorite Button -->
-    <button
-      class="product-card__favorite"
-      [class.product-card__favorite--active]="isFavorite"
-      (click)="onToggleFavorite($event)"
-      [attr.aria-label]="isFavorite ? 'Remove from favorites' : 'Add to favorites'"
-    >
+    <button class="product-card__favorite" [class.product-card__favorite--active]="isFavorite"
+      (click)="onToggleFavorite($event)" [attr.aria-label]="isFavorite ? 'Remove from favorites' : 'Add to favorites'">
       <i class="pi" [ngClass]="isFavorite ? 'pi-heart-fill' : 'pi-heart'"></i>
     </button>
 

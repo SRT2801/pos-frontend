@@ -2,8 +2,6 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductCardData } from '../interfaces/product-data.interface';
 
-
-
 @Component({
   selector: 'app-product-card',
   standalone: true,
@@ -18,6 +16,11 @@ export class ProductCard {
   @Output() viewProduct = new EventEmitter<ProductCardData>();
 
   isFavorite = false;
+
+  getImageUrl(image: string | string[] | undefined): string {
+    if (!image) return 'images/default-product.png';
+    return Array.isArray(image) ? image[0] : image;
+  }
 
   onAddToCart(event: Event): void {
     event.stopPropagation();
