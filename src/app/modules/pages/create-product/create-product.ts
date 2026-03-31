@@ -24,7 +24,7 @@ export class CreateProductPage implements OnInit {
   price = signal('');
   inventory = signal('');
   categoryId = signal('');
-  image = signal('');
+  images = signal<string[]>([]);
 
   // Category Creation Signals
   isCreatingCategory = signal(false);
@@ -105,7 +105,7 @@ export class CreateProductPage implements OnInit {
   removeImage() {
     this.selectedFile.set(null);
     this.imagePreview.set(null);
-    this.image.set('');
+    this.images.set([]);
   }
 
   onSubmit() {
@@ -126,18 +126,24 @@ export class CreateProductPage implements OnInit {
     this.spinner.show();
 
     const fileToUpload = this.selectedFile();
-    const upload$ = fileToUpload ? this.productsService.uploadImage(fileToUpload) : of(null as any);
+    const upload$ = fileToUpload ? this.productsService.uploadImages([fileToUpload]) : of([]);
 
     upload$
       .pipe(
-        switchMap((uploadRes: any) => {
-          const imageUrl =
-            (uploadRes &&
-              (uploadRes.url ||
-                uploadRes.secureUrl ||
-                uploadRes.secure_url ||
-                uploadRes.fileName)) ||
-            'images/default-product.png';
+        switchMap((res: any) => {
+          // Extraer las URLs dependiendo de la estructura de respuesta del backend.
+          // Si es un arreglo de strings, se usa tal cual.
+          // Si es un objeto o arreglo de objetos, mapeamos a las propiedades `url` o `secure_url`.
+          let urls: string[] = [];
+          if (Array.isArray(res)) {
+            urls = res.map((item) =>
+              typeof item === 'string' ? item : item.url || item.secure_url || item.secureUrl,
+            );
+          } else if (res && (res.url || res.secure_url || res.secureUrl)) {
+            urls = [res.url || res.secure_url || res.secureUrl];
+          }
+
+          const imageUrls = urls && urls.length > 0 ? urls : ['images/default-product.png'];
 
           const newProduct: CreateProductDto = {
             name: this.name(),
@@ -145,7 +151,7 @@ export class CreateProductPage implements OnInit {
             price: Number(this.price()),
             inventory: Number(this.inventory()),
             categoryId: Number(this.categoryId()),
-            image: imageUrl,
+            images: imageUrls,
           };
           return this.productsService.createProduct(newProduct);
         }),
