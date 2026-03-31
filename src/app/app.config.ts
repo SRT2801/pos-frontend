@@ -17,15 +17,13 @@ import { environment } from '../environments/environment';
 import { authInterceptor } from './modules/core/http/interceptors/auth.interceptor';
 import { errorInterceptor } from './modules/core/http/interceptors/error.interceptor';
 import { storeIterceptor } from './modules/core/http/interceptors/store.interceptor';
-import { AuthService } from './modules/services/auth.service';
+import { AuthService } from './modules/shared/services/auth.service';
 
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura';
 import { MessageService } from 'primeng/api';
 
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
-
-
 
 export const appConfig: ApplicationConfig = {
   providers: [
