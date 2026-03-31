@@ -1,0 +1,61 @@
+<article class="product-card" (click)="onViewProduct()">
+  <!-- Image Container -->
+  <div class="product-card__image-wrapper" [style.background-color]="product.bgColor || '#f0f4f8'">
+    <img
+      class="product-card__image"
+      [src]="product.image"
+      [alt]="product.name"
+      loading="lazy"
+    />
+
+    <!-- Favorite Button -->
+    <button
+      class="product-card__favorite"
+      [class.product-card__favorite--active]="isFavorite"
+      (click)="onToggleFavorite($event)"
+      [attr.aria-label]="isFavorite ? 'Remove from favorites' : 'Add to favorites'"
+    >
+      <i class="pi" [ngClass]="isFavorite ? 'pi-heart-fill' : 'pi-heart'"></i>
+    </button>
+
+    <!-- Quick Add Overlay -->
+    <button class="product-card__quick-add" (click)="onAddToCart($event)">
+      <i class="pi pi-shopping-cart"></i>
+      <span>Quick Add</span>
+    </button>
+  </div>
+
+  <!-- Card Body -->
+  <div class="product-card__body">
+    <!-- Badge + Rating Row -->
+    <div class="product-card__meta">
+      <span *ngIf="product.badge" [class]="badgeClass">
+        {{ product.badge }}
+      </span>
+      <div class="product-card__rating">
+        <i class="pi pi-star-fill product-card__star"></i>
+        <span class="product-card__rating-value">{{ product.rating }}</span>
+      </div>
+    </div>
+
+    <!-- Product Name -->
+    <h3 class="product-card__name">{{ product.name }}</h3>
+
+    <!-- Description -->
+    <p class="product-card__description">{{ product.description }}</p>
+
+    <!-- Price + Add to Cart -->
+    <div class="product-card__footer">
+      <div class="product-card__prices">
+        <span class="product-card__price">{{ formattedPrice }}</span>
+        <span *ngIf="product.originalPrice" class="product-card__original-price">
+          {{ formattedOriginalPrice }}
+        </span>
+      </div>
+      <button class="product-card__add-btn" (click)="onAddToCart($event)">
+        <i class="pi pi-shopping-cart"></i>
+        Add to Cart
+      </button>
+    </div>
+  </div>
+</article>
