@@ -5,6 +5,8 @@ import { Layout } from './modules/shared/layout/layout';
 import { Home } from './modules/pages/home/home';
 import { RegisterStore } from './modules/pages/register-store/register-store';
 import { DashboardComponent } from './modules/pages/dashboard/dashboard';
+import { ProductsPage } from './modules/pages/products/products';
+import { CreateProductPage } from './modules/pages/create-product/create-product';
 
 export const routes: Routes = [
   {
@@ -30,6 +32,14 @@ export const routes: Routes = [
       {
         path: 'register-store',
         component: RegisterStore,
+      },
+      {
+        path: 'products',
+        component: ProductsPage,
+      },
+      {
+        path: 'products/create',
+        component: CreateProductPage,
       },
     ],
   },
