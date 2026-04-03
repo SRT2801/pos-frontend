@@ -11,7 +11,7 @@ export const storeIterceptor: HttpInterceptorFn = (req, next) => {
     return next(req);
   }
 
-  const storeId = isPlatformBrowser(platformId) ? localStorage.getItem('storeId') : null;
+  const storeId = isPlatformBrowser(platformId) ? sessionStorage.getItem('activeStoreId') : null;
 
   if (!storeId) {
     return next(req);
