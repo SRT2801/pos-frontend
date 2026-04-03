@@ -49,3 +49,7 @@ Thumbs.db
 .env
 .env.*
 !.env.example
+
+# Skills y artefactos relacionados
+/.agents/
+/skills-lock.json
