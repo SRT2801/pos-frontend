@@ -13,6 +13,9 @@ export interface UserInfo {
   id: string;
   email: string;
   globalRole: string;
+  activeRole?: Role;
+  storeId?: string;
+  permissions?: Permission[];
 }
 
 export interface AuthResponse {
