@@ -1,6 +1,6 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { API_BASE_URL } from '../../../../app.config'; 
+import { API_BASE_URL } from '../../../../app.config';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const apiBase = inject(API_BASE_URL);
@@ -19,10 +19,10 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     return next(req);
   }
 
-  // El CAMBIO: En lugar de usar localStorage y un header Bearer manual, 
+  // El CAMBIO: En lugar de usar localStorage y un header Bearer manual,
   // solo le decimos a Axios/Fetch de Angular que envíe las cookies seguras.
   const reqWithCookies = req.clone({
-    withCredentials: true 
+    withCredentials: true,
   });
 
   return next(reqWithCookies);
