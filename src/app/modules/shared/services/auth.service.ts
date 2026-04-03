@@ -1,16 +1,18 @@
 import { Injectable, signal, computed } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { HttpClient, HttpContext } from '@angular/common/http';
+import { Observable, catchError, map, of, switchMap, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { Role } from '../../core/enums/role.enum';
 import { Permission } from '../../core/enums/permission.enum';
 import { AuthResponse, StoreContext, UserInfo } from '../../core/interfaces/auth.interface';
+import { BYPASS_AUTH_RECOVERY } from '../../core/http/interceptors/error.interceptor';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   currentUser = signal<UserInfo | null>(null);
   currentStoreContext = signal<StoreContext | null>(null);
   userStores = signal<StoreContext[]>([]);
+  private readonly activeStoreKey = 'activeStoreId';
 
   isLoggedIn = computed(() => this.currentUser() !== null);
 
@@ -34,46 +36,90 @@ export class AuthService {
     return context ? context.permissions || [] : [];
   });
 
-  constructor(private http: HttpClient) {
-    this.hydrateAuth();
-  }
+  constructor(private http: HttpClient) {}
 
-  hydrateAuth() {
-    if (typeof window !== 'undefined' && window.localStorage) {
-      try {
-        const storedUser = localStorage.getItem('currentUser');
-        const storedContext = localStorage.getItem('currentStoreContext');
-        const storedStores = localStorage.getItem('userStores');
-
-        if (storedUser) this.currentUser.set(JSON.parse(storedUser));
-        if (storedContext) this.currentStoreContext.set(JSON.parse(storedContext));
-        if (storedStores) this.userStores.set(JSON.parse(storedStores));
-      } catch (e) {
-        console.error('Error parsing auth state from localStorage', e);
-      }
-    }
+  restoreSession(): Observable<boolean> {
+    return this.fetchMe().pipe(
+      tap((response) => this.setAuthData(response)),
+      map(() => true),
+      catchError(() =>
+        this.refreshToken(true).pipe(
+          switchMap(() => this.fetchMe()),
+          tap((response) => this.setAuthData(response)),
+          map(() => true),
+          catchError(() => {
+            this.clearAuthData();
+            return of(false);
+          }),
+        ),
+      ),
+    );
   }
 
   private setAuthData(response: AuthResponse) {
-    this.currentUser.set(response.user);
-    this.userStores.set(response.stores || []);
+    const normalized = this.normalizeAuthResponse(response);
+    this.currentUser.set(normalized.user);
+    this.userStores.set(normalized.stores || []);
 
     const initialContext =
-      response.currentContext || (response.stores?.length ? response.stores[0] : null);
+      normalized.currentContext || (normalized.stores?.length ? normalized.stores[0] : null);
 
     this.currentStoreContext.set(initialContext);
 
-    if (typeof window !== 'undefined' && window.localStorage) {
-      localStorage.setItem('currentUser', JSON.stringify(response.user));
-      localStorage.setItem('userStores', JSON.stringify(response.stores || []));
-      if (initialContext) {
-        localStorage.setItem('currentStoreContext', JSON.stringify(initialContext));
-        localStorage.setItem('storeId', initialContext.id);
-      } else {
-        localStorage.removeItem('currentStoreContext');
-        localStorage.removeItem('storeId');
-      }
+    this.persistActiveStoreId(initialContext?.id ?? null);
+  }
+
+  private clearAuthData() {
+    this.currentUser.set(null);
+    this.currentStoreContext.set(null);
+    this.userStores.set([]);
+    this.persistActiveStoreId(null);
+  }
+
+  private fetchMe(): Observable<AuthResponse> {
+    const url = `${environment.apiUrl}/auth/me`;
+    return this.http.get<AuthResponse>(url, {
+      withCredentials: true,
+      context: new HttpContext().set(BYPASS_AUTH_RECOVERY, true),
+    });
+  }
+
+  private normalizeAuthResponse(response: AuthResponse): AuthResponse {
+    const stores = response.stores || [];
+    const requestedStoreId = response.user?.storeId;
+    const persistedStoreId = this.getStoredStoreId();
+    const selectedStore =
+      response.currentContext ||
+      stores.find((store) => store.id === requestedStoreId) ||
+      stores.find((store) => store.id === persistedStoreId) ||
+      stores[0] ||
+      null;
+
+    return {
+      ...response,
+      currentContext: selectedStore,
+    };
+  }
+
+  private persistActiveStoreId(storeId: string | null) {
+    if (typeof window === 'undefined' || !window.sessionStorage) {
+      return;
     }
+
+    if (storeId) {
+      sessionStorage.setItem(this.activeStoreKey, storeId);
+      return;
+    }
+
+    sessionStorage.removeItem(this.activeStoreKey);
+  }
+
+  private getStoredStoreId(): string | null {
+    if (typeof window === 'undefined' || !window.sessionStorage) {
+      return null;
+    }
+
+    return sessionStorage.getItem(this.activeStoreKey);
   }
 
   hasRole(allowedRoles: Role[] | Role): boolean {
@@ -116,21 +162,20 @@ export class AuthService {
     const url = `${environment.apiUrl}/auth/signout`;
     return this.http.post(url, {}, { withCredentials: true }).pipe(
       tap(() => {
-        this.currentUser.set(null);
-        this.currentStoreContext.set(null);
-        this.userStores.set([]);
-        if (typeof window !== 'undefined' && window.localStorage) {
-          localStorage.removeItem('currentUser');
-          localStorage.removeItem('currentStoreContext');
-          localStorage.removeItem('userStores');
-          localStorage.removeItem('storeId');
-        }
+        this.clearAuthData();
       }),
     );
   }
 
-  refreshToken(): Observable<any> {
+  refreshToken(bypassInterceptor = false): Observable<any> {
     const url = `${environment.apiUrl}/auth/refresh`;
-    return this.http.post(url, {}, { withCredentials: true });
+    return this.http.post(
+      url,
+      {},
+      {
+        withCredentials: true,
+        context: bypassInterceptor ? new HttpContext().set(BYPASS_AUTH_RECOVERY, true) : undefined,
+      },
+    );
   }
 }
