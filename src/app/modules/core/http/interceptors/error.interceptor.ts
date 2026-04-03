@@ -1,10 +1,9 @@
-import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
+import { HttpContextToken, HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { catchError, throwError, switchMap } from 'rxjs';
 import { inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from '../../../../../environments/environment';
-
 
 const AUTH_ENDPOINTS = [
   '/auth/refresh',
@@ -14,30 +13,34 @@ const AUTH_ENDPOINTS = [
   '/auth/register-store',
 ];
 
+export const BYPASS_AUTH_RECOVERY = new HttpContextToken<boolean>(() => false);
+
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const http = inject(HttpClient);
   const router = inject(Router);
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
+      const skipAuthRecovery = req.context.get(BYPASS_AUTH_RECOVERY);
+
       if (error.status === 401) {
-        
+        if (skipAuthRecovery) {
+          return throwError(() => error);
+        }
+
         const isAuthEndpoint = AUTH_ENDPOINTS.some((ep) => req.url.includes(ep));
         if (isAuthEndpoint) {
           router.navigate(['/login']);
           return throwError(() => error);
         }
 
-        
-        return http
-          .post(`${environment.apiUrl}/auth/refresh`, {}, { withCredentials: true })
-          .pipe(
-            switchMap(() => next(req)),
-            catchError(() => {
-              router.navigate(['/login']);
-              return throwError(() => error);
-            }),
-          );
+        return http.post(`${environment.apiUrl}/auth/refresh`, {}, { withCredentials: true }).pipe(
+          switchMap(() => next(req)),
+          catchError(() => {
+            router.navigate(['/login']);
+            return throwError(() => error);
+          }),
+        );
       }
 
       if (error.status === 403) {
