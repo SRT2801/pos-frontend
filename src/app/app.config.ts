@@ -44,5 +44,15 @@ export const appConfig: ApplicationConfig = {
       },
     }),
     MessageService,
+    provideAppInitializer(() => {
+      const authService = inject(AuthService);
+      const platformId = inject(PLATFORM_ID);
+
+      if (!isPlatformBrowser(platformId)) {
+        return;
+      }
+
+      return firstValueFrom(authService.restoreSession().pipe(catchError(() => of(false))));
+    }),
   ],
 };
