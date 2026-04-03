@@ -9,8 +9,4 @@ import { usesMinimalLayout } from '../../../layout/minimal-layout.util';
   templateUrl: './header.html',
   styleUrl: './header.css',
 })
-export class Header {
-  
-
-
-}
+export class Header {}
